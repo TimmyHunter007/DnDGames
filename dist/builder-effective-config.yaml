@@ -1,0 +1,47 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.dndtoolkit.app
+productName: D&D DM Toolkit
+files:
+  - filter:
+      - main.js
+      - preload.js
+      - server.js
+      - migrate-to-campaigns.js
+      - package.json
+      - views/**/*
+      - public/**/*
+      - node_modules/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  icon: public/icon.ico
+  artifactName: ${productName}-${version}-Setup.${ext}
+  forceCodeSigning: false
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: D&D DM Toolkit
+portable:
+  artifactName: ${productName}-${version}-Portable.${ext}
+mac:
+  target:
+    - dmg
+    - zip
+  icon: public/icon.icns
+  category: public.app-category.productivity
+linux:
+  target:
+    - AppImage
+    - deb
+  icon: public/icon.png
+  category: Game
+electronVersion: 38.2.2
