@@ -1,6 +1,15 @@
 # D&D DM Toolkit - Node.js Version
 
-A comprehensive web application designed specifically for Dungeon Masters to manage their D&D campaigns. Each feature has its own dedicated page for better organization and user experience.
+A comprehensive web application designed specifically for Dungeon Masters to manage multiple D&D campaigns. Each campaign has its own isolated data, and each feature has its own dedicated page for better organization and user experience.
+
+## ✨ New: Multi-Campaign Support!
+
+Manage multiple D&D campaigns simultaneously! Each campaign maintains completely separate data:
+- **Campaign Selector**: Quick dropdown in the navigation bar to switch between campaigns
+- **Campaign Manager**: Dedicated page to create, edit, and manage campaigns
+- **Data Isolation**: Each campaign has its own NPCs, enemies, items, sessions, and more
+- **Import/Export**: Share data between campaigns or create backups
+- **Easy Migration**: Automatic migration of existing data to campaign structure
 
 ## Features
 
@@ -9,6 +18,14 @@ A comprehensive web application designed specifically for Dungeon Masters to man
 - Recent notes display
 - Active initiative tracking
 - Quick stats overview
+- Campaign-specific data display
+
+### 🗺️ Campaign Manager (`/campaigns`)
+- Create and manage multiple campaigns
+- Switch between campaigns instantly
+- Import data from other campaigns
+- Export campaign backups
+- Edit campaign details
 
 ### 👥 NPCs (`/npcs`)
 - Create and manage NPCs with full stat blocks
@@ -57,6 +74,16 @@ A comprehensive web application designed specifically for Dungeon Masters to man
 - Store detailed descriptions and effects
 - Organize by category (weapon, armor, potion, etc.)
 
+### 📅 Session Tracker (`/sessions`)
+- Track session dates and durations
+- Record session summaries and highlights
+- Link sessions to specific campaigns
+
+### 🎯 Encounter Manager (`/encounters`)
+- Create and manage combat encounters
+- Track monsters and NPCs in encounters
+- Plan difficulty levels and rewards
+
 ## Installation & Setup
 
 ### Prerequisites
@@ -70,12 +97,18 @@ A comprehensive web application designed specifically for Dungeon Masters to man
    npm install
    ```
 
-2. **Start the Server**
+2. **Migrate Existing Data (if upgrading from v1.0)**
+   ```bash
+   npm run migrate
+   ```
+   This will move your existing data into a default campaign.
+
+3. **Start the Server**
    ```bash
    npm start
    ```
 
-3. **Access the Application**
+4. **Access the Application**
    Open your web browser and go to: `http://localhost:3000`
 
 ### Development Mode (Optional)
@@ -89,48 +122,76 @@ npm run dev
 
 ```
 dnd-toolkit/
-├── server.js              # Express server and routing
-├── package.json           # Node.js dependencies and scripts
-├── README.md             # This file
-├── views/                # HTML pages
-│   ├── dashboard.html    # Main dashboard
-│   ├── npcs.html        # NPC management
-│   ├── enemies.html     # Enemy management
-│   ├── notes.html       # Session notes
-│   ├── dice.html        # Dice roller
-│   ├── initiative.html  # Initiative tracker
-│   ├── spells.html      # Spell reference
-│   └── items.html       # Magic items
-└── public/              # Static assets
-    ├── css/
-    │   └── styles.css   # Shared styling
-    └── js/
-        ├── shared.js    # Common functionality
-        ├── dashboard.js # Dashboard-specific code
-        ├── npcs.js      # NPC management
-        ├── enemies.js   # Enemy management
-        ├── notes.js     # Notes management
-        ├── dice.js      # Dice rolling
-        ├── initiative.js # Initiative tracking
-        ├── spells.js    # Spell reference
-        └── items.js     # Item management
+├── server.js                    # Express server and routing
+├── package.json                 # Node.js dependencies and scripts
+├── migrate-to-campaigns.js      # Data migration script
+├── README.md                    # This file
+├── CAMPAIGN_MIGRATION_GUIDE.md  # Campaign system documentation
+├── views/                       # HTML pages
+│   ├── dashboard.html           # Main dashboard
+│   ├── campaigns.html           # Campaign manager
+│   ├── npcs.html               # NPC management
+│   ├── enemies.html            # Enemy management
+│   ├── notes.html              # Session notes
+│   ├── dice.html               # Dice roller
+│   ├── initiative.html         # Initiative tracker
+│   ├── spells.html             # Spell reference
+│   ├── items.html              # Magic items
+│   ├── sessions.html           # Session tracker
+│   └── encounters.html         # Encounter manager
+├── public/                     # Static assets
+│   ├── css/
+│   │   └── styles.css          # Shared styling
+│   └── js/
+│       ├── shared.js           # Common functionality + campaign management
+│       ├── campaigns.js        # Campaign management
+│       ├── dashboard.js        # Dashboard-specific code
+│       ├── npcs.js             # NPC management
+│       ├── enemies.js          # Enemy management
+│       ├── notes.js            # Notes management
+│       ├── dice.js             # Dice rolling
+│       ├── initiative.js       # Initiative tracking
+│       ├── spells.js           # Spell reference
+│       ├── items.js            # Item management
+│       ├── sessions.js         # Session tracking
+│       └── encounters.js       # Encounter management
+└── data/                       # Data storage
+    ├── campaigns.json          # Campaign list
+    └── campaigns/              # Campaign-specific data
+        └── [campaign-id]/
+            ├── npcs.json
+            ├── enemies.json
+            ├── items.json
+            ├── spells.json
+            ├── sessions.json
+            ├── encounters.json
+            ├── notes.json
+            ├── initiative.json
+            └── diceHistory.json
 ```
 
 ## Technical Details
 
 ### Data Storage
-- **File-Based Storage**: All data is saved as JSON text files in the `./data/` directory
+- **Campaign-Based Storage**: All data is organized by campaign in `./data/campaigns/`
+- **File-Based Storage**: Each campaign stores data as JSON text files
 - **Editable Files**: You can directly edit the JSON files in any text editor
 - **No Database Required**: Everything runs with simple file storage
 - **Data Persistence**: Your data persists between sessions and server restarts
-- **Export/Import**: Built-in backup and restore functionality
-- **File Structure**:
-  - `npcs.json` - All NPCs
-  - `enemies.json` - All enemies/monsters  
-  - `notes.json` - All session notes
-  - `items.json` - All magic items
-  - `initiative.json` - Current initiative order
-  - `diceHistory.json` - Dice roll history
+- **Complete Isolation**: Each campaign has completely separate data
+- **Export/Import**: Built-in backup and restore functionality per campaign
+- **Campaign Structure**:
+  - `campaigns.json` - List of all campaigns
+  - `campaigns/[campaign-id]/` - Individual campaign data folders
+    - `npcs.json` - Campaign NPCs
+    - `enemies.json` - Campaign enemies/monsters  
+    - `notes.json` - Session notes
+    - `items.json` - Magic items
+    - `spells.json` - Spell lists
+    - `sessions.json` - Session history
+    - `encounters.json` - Planned encounters
+    - `initiative.json` - Current initiative order
+    - `diceHistory.json` - Dice roll history
 
 ### Browser Compatibility
 - Modern browsers (Chrome, Firefox, Safari, Edge)
@@ -148,8 +209,16 @@ dnd-toolkit/
 ### Getting Started
 1. Run `npm start` to start the server
 2. Open `http://localhost:3000` in your browser
-3. Start creating NPCs, enemies, and notes
-4. All data is automatically saved to your browser's local storage
+3. Create your first campaign (or migrate existing data with `npm run migrate`)
+4. Start adding NPCs, enemies, and notes
+5. All data is automatically saved to campaign-specific JSON files
+
+### Managing Campaigns
+1. **Switch Campaigns**: Use the dropdown selector in the navigation bar
+2. **Create New Campaign**: Go to `/campaigns` and click "Create New Campaign"
+3. **Edit Campaign**: Click "Edit" on any campaign card
+4. **Import Data**: Share NPCs, enemies, and items between campaigns
+5. **Export Campaign**: Download complete campaign backups as JSON files
 
 ### Navigation
 - Use the navigation bar to switch between different sections
@@ -157,13 +226,14 @@ dnd-toolkit/
 - The dashboard provides quick access to common tasks
 
 ### Data Management
-- All data is automatically saved to JSON files when you make changes
+- All data is automatically saved to campaign-specific JSON files
 - Data persists between browser sessions and server restarts
-- Files are stored in the `./data/` directory
+- Files are stored in `./data/campaigns/[campaign-id]/` directories
 - You can edit the JSON files directly in any text editor
-- Use the "Export Data" button to create backup files
-- Use the "Import Data" button to restore from backup files
-- Use the "Clear All Data" button to reset everything
+- Each campaign can be exported individually as a backup file
+- Import data from backup files or copy between campaigns
+- Campaign selector remembers your last active campaign
+- Safe deletion: removing a campaign doesn't delete its data files
 
 ### Keyboard Shortcuts
 - **Escape**: Close any open modal
@@ -176,6 +246,7 @@ The server provides the following routes:
 ### Page Routes
 - `GET /` - Redirects to dashboard
 - `GET /dashboard` - Dashboard page
+- `GET /campaigns` - Campaign manager page
 - `GET /npcs` - NPCs management page
 - `GET /enemies` - Enemies management page
 - `GET /notes` - Notes management page
@@ -183,13 +254,19 @@ The server provides the following routes:
 - `GET /initiative` - Initiative tracker page
 - `GET /spells` - Spell reference page
 - `GET /items` - Items management page
+- `GET /sessions` - Session tracker page
+- `GET /encounters` - Encounter manager page
 
-### Data API Routes
-- `GET /api/data` - Get all data from files
-- `POST /api/data` - Save data to specific file (body: `{type: "npcs", data: [...]}`)
-- `DELETE /api/data/:type` - Delete specific data file
-- `GET /api/export` - Export all data as downloadable backup file
-- `POST /api/import` - Import data from backup file
+### Campaign API Routes
+- `GET /api/campaigns` - List all campaigns
+- `POST /api/campaigns` - Create new campaign
+- `PUT /api/campaigns/:id` - Update campaign
+- `DELETE /api/campaigns/:id` - Delete campaign
+- `GET /api/campaigns/:campaignId/data` - Get campaign data
+- `POST /api/campaigns/:campaignId/data` - Save campaign data
+- `GET /api/campaigns/:campaignId/export` - Export campaign
+- `POST /api/campaigns/:campaignId/import` - Import to campaign
+- `POST /api/campaigns/:targetId/import/:sourceId` - Copy between campaigns
 
 ## Customization
 
@@ -210,23 +287,33 @@ Edit `public/css/styles.css` to customize colors, fonts, and layout:
 
 ## Tips for DMs
 
+### Campaign Organization
+1. Create separate campaigns for each game you run
+2. Use descriptive campaign names (e.g., "Curse of Strahd - Fall 2025")
+3. Export campaign backups regularly
+4. Import common NPCs/enemies between campaigns to save time
+
 ### Session Preparation
-1. Create NPCs your players will meet
-2. Set up potential enemies for encounters
-3. Write session notes with key plot points
-4. Prepare magic items as rewards
+1. Switch to the correct campaign before starting
+2. Create NPCs your players will meet
+3. Set up potential enemies for encounters
+4. Write session notes with key plot points
+5. Prepare magic items as rewards
+6. Log the session in the session tracker
 
 ### During Sessions
 1. Use the dashboard for quick dice rolls
 2. Track initiative for combat encounters
 3. Reference spells and items quickly
 4. Take notes on player actions and decisions
+5. Update session notes in real-time
 
 ### Between Sessions
-1. Review and update notes
+1. Review and update session summaries
 2. Plan future encounters and NPCs
 3. Create new magic items and rewards
 4. Update NPC motivations and goals
+5. Keep campaign data backed up
 
 ## Troubleshooting
 
@@ -236,14 +323,32 @@ Edit `public/css/styles.css` to customize colors, fonts, and layout:
 - Try a different port by setting `PORT` environment variable
 
 ### Data Not Saving
-- Check that your browser supports localStorage
-- Ensure you're not in private/incognito mode
-- Clear browser cache if issues persist
+- Ensure you have an active campaign selected
+- Check that the `data/campaigns/` directory is writable
+- Verify campaign files exist in the correct directory
+- Check browser console for error messages
 
 ### Performance Issues
 - Clear old dice roll history if it gets too long
 - Remove unused NPCs/enemies to keep lists manageable
 - Refresh the page if the interface becomes sluggish
+
+## Version History
+
+### v2.0 - Multi-Campaign Support
+- Added campaign management system
+- Campaign-based data isolation
+- Import/export per campaign
+- Campaign selector in navigation
+- Data migration tool
+- Import data between campaigns
+
+### v1.0 - Initial Release
+- Basic NPC, enemy, and item management
+- Dice roller and initiative tracker
+- Session notes
+- Spell reference
+- File-based storage
 
 ## Future Enhancements
 
@@ -256,10 +361,17 @@ Potential features that could be added:
 - Experience point tracking
 - Loot generators
 - Map integration
-- Database integration for team sharing
+- Multi-user support with authentication
+- Campaign sharing between DMs
+
+## Additional Documentation
+
+- **[Campaign Migration Guide](CAMPAIGN_MIGRATION_GUIDE.md)** - Detailed guide for upgrading to v2.0
+- **[Data Storage Guide](DATA_STORAGE.md)** - Information about data structure
+- **[Web Interface Guide](WEB_INTERFACE_GUIDE.md)** - Detailed UI usage instructions
 
 ---
 
 **Happy DMing!** 🎲⚔️🐉
 
-This toolkit is designed to make your D&D sessions smoother and more organized. Each feature has its own dedicated page for better focus and usability during gameplay.
+This toolkit is designed to make your D&D sessions smoother and more organized. With multi-campaign support, you can now manage all your games in one place while keeping data completely separate. Each feature has its own dedicated page for better focus and usability during gameplay.
