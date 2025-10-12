@@ -1,21 +1,100 @@
 {
   "name": "dnd-dm-toolkit",
-  "version": "1.0.0",
-  "description": "A comprehensive D&D DM toolkit for managing campaigns",
-  "main": "server.js",
+  "version": "2.0.0",
+  "description": "A comprehensive D&D DM toolkit for managing campaigns - Desktop Edition",
+  "main": "main.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate": "node migrate-to-campaigns.js"
+    "migrate": "node migrate-to-campaigns.js",
+    "electron": "electron .",
+    "electron-dev": "NODE_ENV=development electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
   },
-  "keywords": ["dnd", "dungeons-and-dragons", "dm", "toolkit", "rpg"],
+  "keywords": [
+    "dnd",
+    "dungeons-and-dragons",
+    "dm",
+    "toolkit",
+    "rpg",
+    "electron",
+    "desktop"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "body-parser": "^1.20.2"
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2"
   },
   "devDependencies": {
+    "electron": "^38.2.2",
+    "electron-builder": "^26.0.12",
     "nodemon": "^3.0.1"
+  },
+  "build": {
+    "appId": "com.dndtoolkit.app",
+    "productName": "D&D DM Toolkit",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "server.js",
+      "migrate-to-campaigns.js",
+      "package.json",
+      "views/**/*",
+      "public/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/icon.ico",
+      "artifactName": "${productName}-${version}-Setup.${ext}",
+      "forceCodeSigning": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "D&D DM Toolkit"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable.${ext}"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "public/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "public/icon.png",
+      "category": "Game"
+    }
   }
 }

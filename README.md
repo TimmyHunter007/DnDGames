@@ -1,6 +1,24 @@
-# D&D DM Toolkit - Node.js Version
+# D&D DM Toolkit
 
-A comprehensive web application designed specifically for Dungeon Masters to manage multiple D&D campaigns. Each campaign has its own isolated data, and each feature has its own dedicated page for better organization and user experience.
+A comprehensive application designed specifically for Dungeon Masters to manage multiple D&D campaigns. Available as both a **web application** and a **standalone desktop app**.
+
+## 🖥️ Desktop Edition Available!
+
+This toolkit is now available as a **native desktop application** using Electron! Features include:
+- ✅ No browser required - standalone app window
+- ✅ System tray integration for quick access
+- ✅ Keyboard shortcuts for all major functions
+- ✅ Always-on-top mode for reference during games
+- ✅ Native menus and desktop feel
+- ✅ Portable .exe available (no installation needed)
+
+**[📖 Desktop App Guide](ELECTRON_GUIDE.md)** | **[🌐 Web Version Guide](README.md#installation--setup)**
+
+---
+
+## Overview
+
+A comprehensive toolkit designed specifically for Dungeon Masters to manage multiple D&D campaigns. Each campaign has its own isolated data, and each feature has its own dedicated page for better organization and user experience.
 
 ## ✨ New: Multi-Campaign Support!
 
@@ -103,13 +121,34 @@ Manage multiple D&D campaigns simultaneously! Each campaign maintains completely
    ```
    This will move your existing data into a default campaign.
 
-3. **Start the Server**
-   ```bash
-   npm start
-   ```
+### Running the Application
 
-4. **Access the Application**
-   Open your web browser and go to: `http://localhost:3000`
+#### Option 1: Desktop App (Recommended) 🖥️
+```bash
+npm run electron
+```
+Launches as a standalone desktop application with system tray and keyboard shortcuts.
+
+**[📖 See Desktop App Guide for more details](ELECTRON_GUIDE.md)**
+
+#### Option 2: Web Version 🌐
+```bash
+npm start
+```
+Then open your web browser and go to: `http://localhost:3000`
+
+### Building Desktop Installers
+
+**Windows Installer & Portable .exe:**
+```bash
+npm run dist:win
+```
+Creates installable `.exe` and portable `.exe` in the `dist/` folder.
+
+**All Platforms:**
+```bash
+npm run dist
+```
 
 ### Development Mode (Optional)
 If you want to use auto-restart during development:
@@ -236,8 +275,21 @@ dnd-toolkit/
 - Safe deletion: removing a campaign doesn't delete its data files
 
 ### Keyboard Shortcuts
+
+#### Web Version
 - **Escape**: Close any open modal
 - **Enter**: Submit forms (when focused on input fields)
+
+#### Desktop App (Additional Shortcuts)
+- **Ctrl+1-5**: Quick navigation (Dashboard, NPCs, Enemies, Initiative, Dice)
+- **Ctrl+E**: Export campaign
+- **Ctrl+I**: Import campaign
+- **Ctrl+R**: Reload
+- **Ctrl+Shift+I**: Developer tools
+- **Ctrl+M**: Minimize window
+- **Alt+F4**: Exit
+
+**[See full keyboard shortcuts list](ELECTRON_GUIDE.md#keyboard-shortcuts)**
 
 ## API Endpoints
 
@@ -335,13 +387,16 @@ Edit `public/css/styles.css` to customize colors, fonts, and layout:
 
 ## Version History
 
-### v2.0 - Multi-Campaign Support
-- Added campaign management system
-- Campaign-based data isolation
-- Import/export per campaign
-- Campaign selector in navigation
-- Data migration tool
-- Import data between campaigns
+### v2.0 - Multi-Campaign Support & Desktop Edition
+- **🖥️ Desktop Application**: Electron-based standalone app for Windows, Mac, and Linux
+- **System Tray Integration**: Minimize to tray, quick access
+- **Keyboard Shortcuts**: Full desktop shortcuts for all functions
+- **Campaign Management**: Create and manage multiple campaigns
+- **Campaign-based Data Isolation**: Each campaign has separate data
+- **Import/Export**: Per-campaign or between campaigns
+- **Campaign Selector**: Quick dropdown in navigation
+- **Data Migration Tool**: Automated migration from v1.0
+- **Portable .exe**: No-installation option for Windows
 
 ### v1.0 - Initial Release
 - Basic NPC, enemy, and item management
@@ -349,6 +404,7 @@ Edit `public/css/styles.css` to customize colors, fonts, and layout:
 - Session notes
 - Spell reference
 - File-based storage
+- Web-only version
 
 ## Future Enhancements
 
@@ -366,6 +422,7 @@ Potential features that could be added:
 
 ## Additional Documentation
 
+- **[🖥️ Desktop App Guide](ELECTRON_GUIDE.md)** - Complete guide for the Electron desktop edition
 - **[Campaign Migration Guide](CAMPAIGN_MIGRATION_GUIDE.md)** - Detailed guide for upgrading to v2.0
 - **[Data Storage Guide](DATA_STORAGE.md)** - Information about data structure
 - **[Web Interface Guide](WEB_INTERFACE_GUIDE.md)** - Detailed UI usage instructions

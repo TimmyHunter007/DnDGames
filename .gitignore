@@ -10,6 +10,18 @@ data/*
 !data/
 !data/README.md
 
+# Electron build output
+dist/
+build/
+out/
+
+# Electron-builder output
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.snap
+
 # Runtime data
 pids
 *.pid

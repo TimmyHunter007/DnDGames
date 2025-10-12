@@ -5,9 +5,14 @@ const fs = require('fs').promises;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, 'data');
+
+// Use Electron userData path if running in Electron, otherwise use local data folder
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const CAMPAIGNS_DIR = path.join(DATA_DIR, 'campaigns');
 const CAMPAIGNS_FILE = path.join(DATA_DIR, 'campaigns.json');
+
+// Flag to check if running in Electron
+const IS_ELECTRON = process.env.ELECTRON_MODE === 'true';
 
 // Ensure data directories exist
 const ensureDataDir = async () => {
@@ -569,19 +574,47 @@ const startServer = async () => {
     console.log(`📁 Data directory: ${DATA_DIR}`);
     console.log(`🗺️  Campaigns directory: ${CAMPAIGNS_DIR}`);
     
-    app.listen(PORT, () => {
+    if (IS_ELECTRON) {
+        console.log(`🖥️  Running in Electron mode`);
+    }
+    
+    const server = app.listen(PORT, () => {
         console.log(`🎲 D&D DM Toolkit running on http://localhost:${PORT}`);
-        console.log(`📊 Dashboard: http://localhost:${PORT}/dashboard`);
-        console.log(`🗺️  Campaigns: http://localhost:${PORT}/campaigns`);
-        console.log(`👥 NPCs: http://localhost:${PORT}/npcs`);
-        console.log(`⚔️ Enemies: http://localhost:${PORT}/enemies`);
-        console.log(`📝 Notes: http://localhost:${PORT}/notes`);
-        console.log(`🎲 Dice: http://localhost:${PORT}/dice`);
-        console.log(`⚡ Initiative: http://localhost:${PORT}/initiative`);
-        console.log(`🔮 Spells: http://localhost:${PORT}/spells`);
-        console.log(`🏆 Items: http://localhost:${PORT}/items`);
+        
+        if (!IS_ELECTRON) {
+            // Only show all URLs when running standalone
+            console.log(`📊 Dashboard: http://localhost:${PORT}/dashboard`);
+            console.log(`🗺️  Campaigns: http://localhost:${PORT}/campaigns`);
+            console.log(`👥 NPCs: http://localhost:${PORT}/npcs`);
+            console.log(`⚔️ Enemies: http://localhost:${PORT}/enemies`);
+            console.log(`📝 Notes: http://localhost:${PORT}/notes`);
+            console.log(`🎲 Dice: http://localhost:${PORT}/dice`);
+            console.log(`⚡ Initiative: http://localhost:${PORT}/initiative`);
+            console.log(`🔮 Spells: http://localhost:${PORT}/spells`);
+            console.log(`🏆 Items: http://localhost:${PORT}/items`);
+        }
+        
         console.log(`💾 Campaign data will be saved to: ${CAMPAIGNS_DIR}`);
     });
+    
+    // Graceful shutdown
+    process.on('SIGTERM', () => {
+        console.log('🛑 SIGTERM received, closing server...');
+        server.close(() => {
+            console.log('✅ Server closed');
+            process.exit(0);
+        });
+    });
+    
+    process.on('SIGINT', () => {
+        console.log('🛑 SIGINT received, closing server...');
+        server.close(() => {
+            console.log('✅ Server closed');
+            process.exit(0);
+        });
+    });
+    
+    return server;
 };
 
 startServer().catch(console.error);
