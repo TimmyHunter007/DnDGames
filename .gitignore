@@ -3,7 +3,11 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Campaign data (user-specific, should not be committed)
 data/
+# But keep the README for documentation
+!data/README.md
 
 # Runtime data
 pids
