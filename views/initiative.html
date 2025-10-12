@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiative Tracker - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>D&D DM Toolkit</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/sessions" class="nav-link">Sessions</a>
+                <a href="/encounters" class="nav-link">Encounters</a>
+                <a href="/dice" class="nav-link">Dice Roller</a>
+                <a href="/initiative" class="nav-link active">Initiative</a>
+                <a href="/spells" class="nav-link">Spells</a>
+                <a href="/enemies" class="nav-link">Enemies</a>
+                <a href="/npcs" class="nav-link">NPCs</a>
+                <a href="/items" class="nav-link">Items</a>
+                <a href="/notes" class="nav-link">Notes</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Initiative Tracker</h2>
+                <button class="btn-primary" onclick="showInitiativeModal()">Add to Initiative</button>
+            </div>
+            
+            <div class="initiative-container">
+                <button class="btn-secondary" onclick="sortInitiative()">Sort by Initiative</button>
+                <button class="btn-secondary" onclick="nextTurn()">Next Turn</button>
+                <button class="btn-secondary" onclick="clearInitiative()">Clear All</button>
+                <div id="initiative-list" class="initiative-list">
+                    <!-- Initiative order will be shown here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script src="/js/initiative.js"></script>
+</body>
+</html>

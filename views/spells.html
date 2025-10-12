@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spells - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>D&D DM Toolkit</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/sessions" class="nav-link">Sessions</a>
+                <a href="/encounters" class="nav-link">Encounters</a>
+                <a href="/dice" class="nav-link">Dice Roller</a>
+                <a href="/initiative" class="nav-link">Initiative</a>
+                <a href="/spells" class="nav-link active">Spells</a>
+                <a href="/enemies" class="nav-link">Enemies</a>
+                <a href="/npcs" class="nav-link">NPCs</a>
+                <a href="/items" class="nav-link">Items</a>
+                <a href="/notes" class="nav-link">Notes</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Spell Reference</h2>
+                <div class="spell-filters">
+                    <div class="search-section">
+                        <input type="text" id="spell-search" class="search-input" placeholder="Search spells..." onkeyup="filterSpells()">
+                    </div>
+                    <div class="class-filter-section">
+                        <div class="filter-header">
+                            <label>Filter by Classes</label>
+                            <button type="button" class="btn btn-small" onclick="clearFilters()">Clear Filters</button>
+                        </div>
+                        <div class="class-checkboxes">
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Bard" class="class-filter-checkbox" onchange="filterSpells()">
+                                Bard
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Cleric" class="class-filter-checkbox" onchange="filterSpells()">
+                                Cleric
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Druid" class="class-filter-checkbox" onchange="filterSpells()">
+                                Druid
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Paladin" class="class-filter-checkbox" onchange="filterSpells()">
+                                Paladin
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Ranger" class="class-filter-checkbox" onchange="filterSpells()">
+                                Ranger
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Sorcerer" class="class-filter-checkbox" onchange="filterSpells()">
+                                Sorcerer
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Warlock" class="class-filter-checkbox" onchange="filterSpells()">
+                                Warlock
+                            </label>
+                            <label class="class-checkbox-label">
+                                <input type="checkbox" value="Wizard" class="class-filter-checkbox" onchange="filterSpells()">
+                                Wizard
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="spells-list" class="content-list">
+                <!-- Spells will be populated here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script src="/js/spells.js"></script>
+</body>
+</html>

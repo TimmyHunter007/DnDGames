@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>D&D DM Toolkit</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/sessions" class="nav-link">Sessions</a>
+                <a href="/encounters" class="nav-link">Encounters</a>
+                <a href="/dice" class="nav-link active">Dice Roller</a>
+                <a href="/initiative" class="nav-link">Initiative</a>
+                <a href="/spells" class="nav-link">Spells</a>
+                <a href="/enemies" class="nav-link">Enemies</a>
+                <a href="/npcs" class="nav-link">NPCs</a>
+                <a href="/items" class="nav-link">Items</a>
+                <a href="/notes" class="nav-link">Notes</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Dice Roller</h2>
+            </div>
+            
+            <div class="dice-container">
+                <!-- Quick Dice Buttons -->
+                <div class="quick-dice-section">
+                    <h3>Quick Roll</h3>
+                    <div class="quick-dice-grid">
+                        <button class="quick-dice-btn" data-sides="4" onclick="quickRoll(4)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d4</span>
+                        </button>
+                        <button class="quick-dice-btn" data-sides="6" onclick="quickRoll(6)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d6</span>
+                        </button>
+                        <button class="quick-dice-btn" data-sides="8" onclick="quickRoll(8)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d8</span>
+                        </button>
+                        <button class="quick-dice-btn" data-sides="10" onclick="quickRoll(10)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d10</span>
+                        </button>
+                        <button class="quick-dice-btn" data-sides="12" onclick="quickRoll(12)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d12</span>
+                        </button>
+                        <button class="quick-dice-btn d20-special" data-sides="20" onclick="quickRoll(20)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d20</span>
+                        </button>
+                        <button class="quick-dice-btn" data-sides="100" onclick="quickRoll(100)">
+                            <div class="dice-icon">🎲</div>
+                            <span>d100</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Roller -->
+                <div class="advanced-dice-section">
+                    <h3>Advanced Roller</h3>
+                    <div class="dice-controls">
+                        <div class="control-group">
+                            <label for="dice-count">Count</label>
+                            <input type="number" id="dice-count" value="1" min="1" max="20">
+                        </div>
+                        <div class="control-group">
+                            <label for="dice-type">Die Type</label>
+                            <select id="dice-type">
+                                <option value="4">d4</option>
+                                <option value="6">d6</option>
+                                <option value="8">d8</option>
+                                <option value="10">d10</option>
+                                <option value="12">d12</option>
+                                <option value="20">d20</option>
+                                <option value="100">d100</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="dice-modifier">Modifier</label>
+                            <input type="number" id="dice-modifier" value="0" placeholder="0">
+                        </div>
+                        <div class="control-group">
+                            <label for="roll-description">Description</label>
+                            <input type="text" id="roll-description" placeholder="e.g., Attack Roll">
+                        </div>
+                    </div>
+                    
+                    <div class="special-rolls">
+                        <button class="btn-secondary" onclick="rollWithAdvantage()">Advantage</button>
+                        <button class="btn-secondary" onclick="rollWithDisadvantage()">Disadvantage</button>
+                        <button class="btn-primary" onclick="rollCustomDice()">Roll</button>
+                    </div>
+                </div>
+
+                <!-- Results Display -->
+                <div id="dice-results" class="dice-results">
+                    <div class="results-placeholder">
+                        <div class="dice-icon-large">🎲</div>
+                        <p>Click a dice button or use the advanced roller to start rolling!</p>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="dice-statistics">
+                    <h3>Session Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number" id="total-rolls">0</span>
+                            <span class="stat-label">Total Rolls</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="nat20-count">0</span>
+                            <span class="stat-label">Natural 20s</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="nat1-count">0</span>
+                            <span class="stat-label">Natural 1s</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="avg-roll">0</span>
+                            <span class="stat-label">Average</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div id="dice-history" class="dice-history">
+                    <div class="history-header">
+                        <h3>Roll History</h3>
+                        <button class="btn-small" onclick="clearDiceHistory()">Clear</button>
+                    </div>
+                    <div class="history-content">
+                        <!-- Dice roll history -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script src="/js/dice.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>D&D DM Toolkit</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+                <a href="/sessions" class="nav-link">Sessions</a>
+                <a href="/encounters" class="nav-link">Encounters</a>
+                <a href="/dice" class="nav-link">Dice Roller</a>
+                <a href="/initiative" class="nav-link">Initiative</a>
+                <a href="/spells" class="nav-link">Spells</a>
+                <a href="/enemies" class="nav-link">Enemies</a>
+                <a href="/npcs" class="nav-link">NPCs</a>
+                <a href="/items" class="nav-link">Items</a>
+                <a href="/notes" class="nav-link">Notes</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Dashboard</h2>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <a href="/npcs" class="action-btn" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center;">Add NPC</a>
+                        <a href="/enemies" class="action-btn" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center;">Add Enemy</a>
+                        <a href="/notes" class="action-btn" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center;">Add Note</a>
+                        <a href="/dice" class="action-btn" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center;">Dice Roller</a>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Recent Notes</h3>
+                    <div id="recent-notes" class="recent-content">
+                        <!-- Recent notes will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Active Initiative</h3>
+                    <div id="active-initiative" class="recent-content">
+                        <!-- Active initiative will be shown here -->
+                    </div>
+                </div>
+                
+                <div class="dashboard-card dashboard-card-wide">
+                    <h3>Quick Stats</h3>
+                    <div class="dashboard-stats">
+                        <div class="stat-card npcs">
+                            <div class="stat-number" id="npc-count">0</div>
+                            <div class="stat-label">NPCs</div>
+                        </div>
+                        <div class="stat-card enemies">
+                            <div class="stat-number" id="enemy-count">0</div>
+                            <div class="stat-label">Enemies</div>
+                        </div>
+                        <div class="stat-card notes">
+                            <div class="stat-number" id="note-count">0</div>
+                            <div class="stat-label">Notes</div>
+                        </div>
+                        <div class="stat-card items">
+                            <div class="stat-number" id="item-count">0</div>
+                            <div class="stat-label">Items</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card dashboard-card-wide">
+                    <h3>Data Management</h3>
+                    <div class="data-management">
+                        <button class="action-btn" onclick="exportToPDF()">
+                            <span>📄</span> Export to PDF
+                        </button>
+                        <button class="action-btn" onclick="exportToJSON()">
+                            <span>💾</span> Export Backup
+                        </button>
+                        <button class="action-btn" onclick="showImportModal()">
+                            <span>📥</span> Import Data
+                        </button>
+                        <button class="action-btn" onclick="showDNDBeyondModal()">
+                            <span>⚔️</span> D&D Beyond Import
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/import-export.js"></script>
+</body>
+</html>

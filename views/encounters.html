@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encounters - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>D&D DM Toolkit</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/sessions" class="nav-link">Sessions</a>
+                <a href="/encounters" class="nav-link active">Encounters</a>
+                <a href="/dice" class="nav-link">Dice Roller</a>
+                <a href="/initiative" class="nav-link">Initiative</a>
+                <a href="/spells" class="nav-link">Spells</a>
+                <a href="/enemies" class="nav-link">Enemies</a>
+                <a href="/npcs" class="nav-link">NPCs</a>
+                <a href="/items" class="nav-link">Items</a>
+                <a href="/notes" class="nav-link">Notes</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Encounters</h2>
+                <div class="page-actions">
+                    <button class="btn-primary" onclick="showEncounterModal()">
+                        <span class="btn-icon">⚔️</span>
+                        New Encounter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Encounters List -->
+            <div class="content-section">
+                <div id="encounters-list" class="encounters-grid">
+                    <!-- Encounters will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Encounter Modal -->
+    <div id="encounter-modal" class="modal-overlay" style="display: none;" onclick="if(event.target===this) this.style.display='none'">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="encounter-modal-title">New Encounter</h3>
+                <span class="modal-close" onclick="document.getElementById('encounter-modal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-content">
+                <div id="encounter-modal-body">
+                    <!-- Encounter form will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/shared.js"></script>
+    <script src="/js/encounters-only.js"></script>
+</body>
+</html>

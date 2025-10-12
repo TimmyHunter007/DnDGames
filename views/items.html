@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>D&D DM Toolkit</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/sessions" class="nav-link">Sessions</a>
+                <a href="/encounters" class="nav-link">Encounters</a>
+                <a href="/dice" class="nav-link">Dice Roller</a>
+                <a href="/initiative" class="nav-link">Initiative</a>
+                <a href="/spells" class="nav-link">Spells</a>
+                <a href="/enemies" class="nav-link">Enemies</a>
+                <a href="/npcs" class="nav-link">NPCs</a>
+                <a href="/items" class="nav-link active">Items</a>
+                <a href="/notes" class="nav-link">Notes</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Magic Items & Equipment</h2>
+                <button class="btn-primary" onclick="showItemModal()">Add New Item</button>
+            </div>
+            
+            <!-- Tag Filters -->
+            <div class="tag-filters">
+                <div class="filter-section">
+                    <label>Filter by Tags:</label>
+                    <div class="tag-filter-buttons" id="item-tag-filter-buttons">
+                        <!-- Tag filter buttons will be populated here -->
+                    </div>
+                    <button class="btn-secondary" onclick="clearItemTagFilters()">Clear Filters</button>
+                </div>
+            </div>
+            
+            <div id="items-list" class="content-list">
+                <!-- Items will be populated here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script src="/js/items.js"></script>
+</body>
+</html>
