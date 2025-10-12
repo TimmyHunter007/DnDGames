@@ -5,8 +5,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # Campaign data (user-specific, should not be committed)
-data/
-# But keep the README for documentation
+data/*
+# But keep the data directory and README for documentation
+!data/
 !data/README.md
 
 # Runtime data
