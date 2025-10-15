@@ -10,7 +10,8 @@ let currentData = {
     diceHistory: [],
     spells: [],
     sessions: [],
-    encounters: []
+    encounters: [],
+    characters: []
 };
 
 // Campaign state
@@ -164,7 +165,8 @@ async function loadData() {
             diceHistory: [],
             spells: [],
             sessions: [],
-            encounters: []
+            encounters: [],
+            characters: []
         };
         return;
     }
@@ -217,6 +219,35 @@ function initializeNavigation() {
             link.classList.add('active');
         }
     });
+
+    // Initialize dropdown toggle
+    const dropdownToggle = document.getElementById('navDropdownToggle');
+    const dropdownMenu = document.getElementById('navDropdownMenu');
+    
+    if (dropdownToggle && dropdownMenu) {
+        // Toggle dropdown on button click
+        dropdownToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownToggle.classList.toggle('active');
+            dropdownMenu.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownToggle.classList.remove('active');
+                dropdownMenu.classList.remove('active');
+            }
+        });
+        
+        // Close dropdown when clicking a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                dropdownToggle.classList.remove('active');
+                dropdownMenu.classList.remove('active');
+            });
+        });
+    }
 }
 
 // Page-specific initialization
@@ -230,6 +261,11 @@ async function initializePage() {
         case 'campaigns':
             if (typeof loadCampaignsPage === 'function') {
                 loadCampaignsPage();
+            }
+            break;
+        case 'characters':
+            if (typeof loadCharactersPage === 'function') {
+                loadCharactersPage();
             }
             break;
         case 'npcs':
@@ -348,6 +384,17 @@ function generateId() {
 }
 
 function formatDate(dateString) {
+    // Handle date strings properly to avoid timezone issues
+    if (!dateString) return 'No date';
+    
+    // If it's an ISO date string (YYYY-MM-DD), parse it as local date
+    if (typeof dateString === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day); // month is 0-indexed
+        return date.toLocaleDateString();
+    }
+    
+    // For other date formats, use the original method
     return new Date(dateString).toLocaleDateString();
 }
 
@@ -403,9 +450,9 @@ function updateRecentNotes() {
     }
     
     container.innerHTML = recentNotes.map(note => 
-        `<div class="recent-note">
-            <strong>${note.title}</strong>
-            <p>${note.content.substring(0, 100)}${note.content.length > 100 ? '...' : ''}</p>
+        `<div class="recent-note" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(167, 139, 250, 0.2);">
+            <div style="font-weight: bold; color: #a78bfa; margin-bottom: 0.5rem;">${note.title}</div>
+            <div style="color: #b8b8b8; line-height: 1.4;">${note.content.substring(0, 100)}${note.content.length > 100 ? '...' : ''}</div>
         </div>`
     ).join('');
 }

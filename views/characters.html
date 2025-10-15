@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Items - D&D DM Toolkit</title>
+    <title>Player Characters - D&D DM Toolkit</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 </head>
@@ -28,9 +29,9 @@
                     <a href="/spells" class="nav-link">Spells</a>
                     <a href="/enemies" class="nav-link">Enemies</a>
                     <a href="/npcs" class="nav-link">NPCs</a>
-                    <a href="/items" class="nav-link active">Items</a>
+                    <a href="/items" class="nav-link">Items</a>
                     <a href="/notes" class="nav-link">Notes</a>
-                    <a href="/characters" class="nav-link">Characters</a>
+                    <a href="/characters" class="nav-link active">Characters</a>
                     <a href="/campaigns" class="nav-link">Campaigns</a>
                 </div>
             </div>
@@ -39,28 +40,21 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
-                <h2>Magic Items & Equipment</h2>
-                <button class="btn-primary" onclick="showItemModal()">Add New Item</button>
-            </div>
-            
-            <!-- Tag Filters -->
-            <div class="tag-filters">
-                <div class="filter-section">
-                    <label>Filter by Tags:</label>
-                    <div class="tag-filter-buttons" id="item-tag-filter-buttons">
-                        <!-- Tag filter buttons will be populated here -->
-                    </div>
-                    <button class="btn-secondary" onclick="clearItemTagFilters()">Clear Filters</button>
+                <h2>Player Characters</h2>
+                <div class="page-actions">
+                    <button class="action-btn" onclick="showCreateCharacterModal()">
+                        <span>👤</span> Add Character
+                    </button>
                 </div>
             </div>
-            
-            <div id="items-list" class="content-list">
-                <!-- Items will be populated here -->
+
+            <div class="characters-grid" id="characters-list">
+                <!-- Characters will be loaded here -->
             </div>
         </main>
     </div>
 
     <script src="/js/shared.js"></script>
-    <script src="/js/items.js"></script>
+    <script src="/js/characters.js"></script>
 </body>
 </html>

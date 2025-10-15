@@ -14,7 +14,7 @@ function displayCampaigns() {
                 <h3>No Campaigns Yet</h3>
                 <p>Create your first campaign to get started!</p>
                 <button class="action-btn" onclick="showCreateCampaignModal()">
-                    <span>➕</span> Create Campaign
+                    <span>✨</span> Create Campaign
                 </button>
             </div>
         `;
@@ -34,11 +34,11 @@ function displayCampaigns() {
                     <span>Created: ${formatDate(campaign.createdDate)}</span>
                 </div>
                 <div class="campaign-actions">
-                    ${!isActive ? `<button class="action-btn btn-small" onclick="switchToCampaign('${campaign.id}')">Switch To</button>` : ''}
-                    <button class="action-btn btn-small" onclick="showEditCampaignModal('${campaign.id}')">Edit</button>
-                    <button class="action-btn btn-small" onclick="showImportModal('${campaign.id}')">Import Data</button>
-                    <button class="action-btn btn-small" onclick="exportCampaign('${campaign.id}')">Export</button>
-                    <button class="action-btn btn-small btn-danger" onclick="deleteCampaign('${campaign.id}')">Delete</button>
+                    ${!isActive ? `<button class="action-btn btn-small" onclick="switchToCampaign('${campaign.id}')"><span>🔄</span> Switch To</button>` : ''}
+                    <button class="action-btn btn-small" onclick="showEditCampaignModal('${campaign.id}')"><span>✏️</span> Edit</button>
+                    <button class="action-btn btn-small" onclick="showImportModal('${campaign.id}')"><span>📥</span> Import</button>
+                    <button class="action-btn btn-small" onclick="exportCampaign('${campaign.id}')"><span>📤</span> Export</button>
+                    <button class="action-btn btn-small btn-danger" onclick="deleteCampaign('${campaign.id}')"><span>🗑️</span> Delete</button>
                 </div>
             </div>
         `;

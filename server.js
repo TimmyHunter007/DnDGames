@@ -101,6 +101,10 @@ app.get('/campaigns', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'campaigns.html'));
 });
 
+app.get('/characters', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'characters.html'));
+});
+
 // API routes for campaign management
 app.get('/api/campaigns', async (req, res) => {
     try {
@@ -266,7 +270,7 @@ app.get('/api/campaigns/:campaignId/data', async (req, res) => {
         const { campaignId } = req.params;
         const campaignDir = await ensureCampaignDir(campaignId);
         const data = {};
-        const files = ['npcs.json', 'enemies.json', 'notes.json', 'items.json', 'initiative.json', 'diceHistory.json', 'spells.json', 'sessions.json', 'encounters.json'];
+        const files = ['npcs.json', 'enemies.json', 'notes.json', 'items.json', 'initiative.json', 'diceHistory.json', 'spells.json', 'sessions.json', 'encounters.json', 'characters.json'];
         
         for (const file of files) {
             const filePath = path.join(campaignDir, file);
@@ -365,7 +369,7 @@ app.get('/api/data', async (req, res) => {
         // Redirect to campaign-specific endpoint
         const campaignDir = await ensureCampaignDir(campaignId);
         const data = {};
-        const files = ['npcs.json', 'enemies.json', 'notes.json', 'items.json', 'initiative.json', 'diceHistory.json', 'spells.json', 'sessions.json', 'encounters.json'];
+        const files = ['npcs.json', 'enemies.json', 'notes.json', 'items.json', 'initiative.json', 'diceHistory.json', 'spells.json', 'sessions.json', 'encounters.json', 'characters.json'];
         
         for (const file of files) {
             const filePath = path.join(campaignDir, file);
@@ -433,7 +437,7 @@ app.get('/api/campaigns/:campaignId/export', async (req, res) => {
         const { campaignId } = req.params;
         const campaignDir = getCampaignDir(campaignId);
         const allData = {};
-        const files = ['npcs.json', 'enemies.json', 'notes.json', 'items.json', 'initiative.json', 'diceHistory.json', 'spells.json', 'sessions.json', 'encounters.json'];
+        const files = ['npcs.json', 'enemies.json', 'notes.json', 'items.json', 'initiative.json', 'diceHistory.json', 'spells.json', 'sessions.json', 'encounters.json', 'characters.json'];
         
         // Get campaign info
         let campaignName = campaignId;
@@ -568,6 +572,263 @@ app.post('/api/import', async (req, res) => {
     }
 });
 
+// Character API Routes
+app.get('/api/characters', async (req, res) => {
+    try {
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            const characters = JSON.parse(content);
+            res.json(characters);
+        } catch (error) {
+            // File doesn't exist yet, return empty array
+            res.json([]);
+        }
+    } catch (error) {
+        console.error('Error fetching characters:', error);
+        res.status(500).json({ error: 'Failed to fetch characters' });
+    }
+});
+
+app.post('/api/characters', async (req, res) => {
+    try {
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        // Get existing characters
+        let characters = [];
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            characters = JSON.parse(content);
+        } catch (error) {
+            // File doesn't exist yet, start with empty array
+        }
+        
+        // Add new character
+        characters.push(req.body);
+        
+        // Save updated characters
+        await fs.writeFile(charactersFile, JSON.stringify(characters, null, 2));
+        
+        res.status(201).json(req.body);
+    } catch (error) {
+        console.error('Error creating character:', error);
+        res.status(500).json({ error: 'Failed to create character' });
+    }
+});
+
+app.put('/api/characters/:characterId', async (req, res) => {
+    try {
+        const { characterId } = req.params;
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        // Get existing characters
+        let characters = [];
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            characters = JSON.parse(content);
+        } catch (error) {
+            return res.status(404).json({ error: 'Characters not found' });
+        }
+        
+        // Find and update character
+        const characterIndex = characters.findIndex(c => c.id === characterId);
+        if (characterIndex === -1) {
+            return res.status(404).json({ error: 'Character not found' });
+        }
+        
+        characters[characterIndex] = { ...characters[characterIndex], ...req.body };
+        
+        // Save updated characters
+        await fs.writeFile(charactersFile, JSON.stringify(characters, null, 2));
+        
+        res.json(characters[characterIndex]);
+    } catch (error) {
+        console.error('Error updating character:', error);
+        res.status(500).json({ error: 'Failed to update character' });
+    }
+});
+
+app.delete('/api/characters/:characterId', async (req, res) => {
+    try {
+        const { characterId } = req.params;
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        // Get existing characters
+        let characters = [];
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            characters = JSON.parse(content);
+        } catch (error) {
+            return res.status(404).json({ error: 'Characters not found' });
+        }
+        
+        // Remove character
+        characters = characters.filter(c => c.id !== characterId);
+        
+        // Save updated characters
+        await fs.writeFile(charactersFile, JSON.stringify(characters, null, 2));
+        
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting character:', error);
+        res.status(500).json({ error: 'Failed to delete character' });
+    }
+});
+
+app.post('/api/characters/:characterId/notes', async (req, res) => {
+    try {
+        const { characterId } = req.params;
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        // Get existing characters
+        let characters = [];
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            characters = JSON.parse(content);
+        } catch (error) {
+            return res.status(404).json({ error: 'Characters not found' });
+        }
+        
+        // Find character and add note
+        const character = characters.find(c => c.id === characterId);
+        if (!character) {
+            return res.status(404).json({ error: 'Character not found' });
+        }
+        
+        if (!character.notes) {
+            character.notes = [];
+        }
+        
+        character.notes.push(req.body);
+        
+        // Save updated characters
+        await fs.writeFile(charactersFile, JSON.stringify(characters, null, 2));
+        
+        res.json(character);
+    } catch (error) {
+        console.error('Error adding note:', error);
+        res.status(500).json({ error: 'Failed to add note' });
+    }
+});
+
+app.delete('/api/characters/:characterId/notes/:noteId', async (req, res) => {
+    try {
+        const { characterId, noteId } = req.params;
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        // Get existing characters
+        let characters = [];
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            characters = JSON.parse(content);
+        } catch (error) {
+            return res.status(404).json({ error: 'Characters not found' });
+        }
+        
+        // Find character and remove note
+        const character = characters.find(c => c.id === characterId);
+        if (!character) {
+            return res.status(404).json({ error: 'Character not found' });
+        }
+        
+        if (character.notes) {
+            character.notes = character.notes.filter(note => note.id !== noteId);
+        }
+        
+        // Save updated characters
+        await fs.writeFile(charactersFile, JSON.stringify(characters, null, 2));
+        
+        res.json(character);
+    } catch (error) {
+        console.error('Error deleting note:', error);
+        res.status(500).json({ error: 'Failed to delete note' });
+    }
+});
+
+app.get('/api/characters/:characterId/export', async (req, res) => {
+    try {
+        const { characterId } = req.params;
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        // Get existing characters
+        let characters = [];
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            characters = JSON.parse(content);
+        } catch (error) {
+            return res.status(404).json({ error: 'Characters not found' });
+        }
+        
+        // Find character
+        const character = characters.find(c => c.id === characterId);
+        if (!character) {
+            return res.status(404).json({ error: 'Character not found' });
+        }
+        
+        // Create export data
+        const exportData = {
+            character: character,
+            exported: new Date().toISOString(),
+            campaignId: campaignId
+        };
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Disposition', `attachment; filename="character-${character.name.replace(/\s+/g, '-')}.json"`);
+        res.json(exportData);
+    } catch (error) {
+        console.error('Error exporting character:', error);
+        res.status(500).json({ error: 'Failed to export character' });
+    }
+});
+
+// Helper function to generate IDs
+function generateId() {
+    return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+}
+
 // Start server
 const startServer = async () => {
     await ensureDataDir();
@@ -592,6 +853,7 @@ const startServer = async () => {
             console.log(`⚡ Initiative: http://localhost:${PORT}/initiative`);
             console.log(`🔮 Spells: http://localhost:${PORT}/spells`);
             console.log(`🏆 Items: http://localhost:${PORT}/items`);
+            console.log(`👤 Characters: http://localhost:${PORT}/characters`);
         }
         
         console.log(`💾 Campaign data will be saved to: ${CAMPAIGNS_DIR}`);

@@ -26,10 +26,23 @@ function loadSessions() {
         const encounterCount = encounters.length;
         
         // Determine session status based on date
-        const sessionDate = session.date ? new Date(session.date) : null;
+        let sessionDateOnly = null;
+        if (session.date) {
+            // Handle ISO date strings (YYYY-MM-DD) properly to avoid timezone issues
+            if (/^\d{4}-\d{2}-\d{2}$/.test(session.date)) {
+                const [year, month, day] = session.date.split('-').map(Number);
+                sessionDateOnly = new Date(year, month - 1, day); // month is 0-indexed
+            } else {
+                const sessionDate = new Date(session.date);
+                sessionDateOnly = new Date(sessionDate.getFullYear(), sessionDate.getMonth(), sessionDate.getDate());
+            }
+        }
+        
         const today = new Date();
-        const isUpcoming = sessionDate && sessionDate > today;
-        const isCompleted = sessionDate && sessionDate <= today;
+        const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        
+        const isUpcoming = sessionDateOnly && sessionDateOnly > todayDateOnly;
+        const isCompleted = sessionDateOnly && sessionDateOnly <= todayDateOnly;
         
         let statusClass = '';
         let statusIcon = '📖';
