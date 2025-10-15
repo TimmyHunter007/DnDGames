@@ -584,21 +584,108 @@ function loadInitiative() {
     // Sort by initiative (highest first)
     const sortedInitiative = [...currentData.initiative].sort((a, b) => b.initiative - a.initiative);
     
-    container.innerHTML = sortedInitiative.map((item, index) => `
-        <div class="initiative-item ${item.current ? 'current' : ''}">
-            <div>
-                <h4>${item.name}</h4>
-                <p>${item.type} - ${item.source}</p>
+    container.innerHTML = sortedInitiative.map((item, index) => {
+        const statsHtml = (item.hp || item.ac) ? `
+            <div class="initiative-stats">
+                ${item.hp ? `<span class="stat-badge hp-badge">HP: ${item.hp}</span>` : ''}
+                ${item.ac ? `<span class="stat-badge ac-badge">AC: ${item.ac}</span>` : ''}
+                <span class="initiative-number">${item.initiative}</span>
             </div>
-            <div class="initiative-score">${item.initiative}</div>
-            <div>
+        ` : '';
+        
+        // Death save tracking for Player Characters
+        const deathSaveHtml = item.type === 'PC' ? `
+            <div class="death-saves" id="death-saves-${item.id}">
+                <div class="death-save-label">Death Saves:</div>
+                <div class="death-save-tracker">
+                    <div class="death-save-successes">
+                        <span class="death-save-label-small">Successes:</span>
+                        <div class="death-save-dots">
+                            ${renderDeathSaveDots(item.deathSaves?.successes || 0, 'success')}
+                        </div>
+                    </div>
+                    <div class="death-save-failures">
+                        <span class="death-save-label-small">Failures:</span>
+                        <div class="death-save-dots">
+                            ${renderDeathSaveDots(item.deathSaves?.failures || 0, 'failure')}
+                        </div>
+                    </div>
+                    <div class="death-save-actions">
+                        <button class="btn-death-save btn-success" onclick="addDeathSave('${item.id}', 'success')" title="Add Success">✓</button>
+                        <button class="btn-death-save btn-failure" onclick="addDeathSave('${item.id}', 'failure')" title="Add Failure">✗</button>
+                        <button class="btn-death-save btn-reset" onclick="resetDeathSaves('${item.id}')" title="Reset">↻</button>
+                    </div>
+                </div>
+            </div>
+        ` : '';
+        
+        return `
+        <div class="initiative-item ${item.current ? 'current' : ''}">
+            <div class="initiative-info">
+                <h4>${item.name}</h4>
+                <p class="initiative-type">${item.type}</p>
+                ${statsHtml}
+                ${deathSaveHtml}
+            </div>
+            <div class="initiative-actions">
                 <button class="btn-small" onclick="removeFromInitiative('${item.id}')">Remove</button>
-                <button class="btn-small" onclick="toggleCurrentTurn('${item.id}')">
+                <button class="btn-small ${item.current ? 'btn-current' : ''}" onclick="toggleCurrentTurn('${item.id}')">
                     ${item.current ? 'Current' : 'Set Current'}
                 </button>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
+}
+
+// Death save helper functions
+function renderDeathSaveDots(count, type) {
+    const dots = [];
+    for (let i = 0; i < 3; i++) {
+        const filled = i < count;
+        const dotClass = filled ? `death-save-dot filled ${type}` : 'death-save-dot empty';
+        dots.push(`<span class="${dotClass}"></span>`);
+    }
+    return dots.join('');
+}
+
+async function addDeathSave(characterId, type) {
+    const initiativeItem = currentData.initiative.find(item => item.id === characterId);
+    if (!initiativeItem) return;
+    
+    // Initialize death saves if not exists
+    if (!initiativeItem.deathSaves) {
+        initiativeItem.deathSaves = { successes: 0, failures: 0 };
+    }
+    
+    if (type === 'success') {
+        initiativeItem.deathSaves.successes++;
+    } else if (type === 'failure') {
+        initiativeItem.deathSaves.failures++;
+    }
+    
+    // Check for death save results
+    if (initiativeItem.deathSaves.successes >= 3) {
+        alert(`${initiativeItem.name} has stabilized! (3 successes)`);
+        initiativeItem.deathSaves = { successes: 0, failures: 0 };
+    } else if (initiativeItem.deathSaves.failures >= 3) {
+        alert(`${initiativeItem.name} has died! (3 failures)`);
+        initiativeItem.deathSaves = { successes: 0, failures: 0 };
+    }
+    
+    await saveData();
+    loadInitiative();
+}
+
+async function resetDeathSaves(characterId) {
+    const initiativeItem = currentData.initiative.find(item => item.id === characterId);
+    if (!initiativeItem) return;
+    
+    if (confirm(`Reset death saves for ${initiativeItem.name}?`)) {
+        initiativeItem.deathSaves = { successes: 0, failures: 0 };
+        await saveData();
+        loadInitiative();
+    }
 }
 
 async function addToInitiative(id, type) {

@@ -604,6 +604,12 @@ function createRandomEnemy(crString, crNumber, type, environment, difficulty, in
     // Generate spells if appropriate
     const spells = isSpellcaster ? generateSpellsFromDatabase(crNumber, finalType) : '';
     
+    // Debug logging
+    if (isSpellcaster) {
+        console.log(`Generating spells for ${name} (${finalType}, CR ${crNumber})`);
+        console.log('Generated spells:', spells);
+    }
+    
     // Generate tags
     const tags = generateTags(finalType, environment, crNumber, isSpellcaster);
     
@@ -919,12 +925,39 @@ function generateAttacks(cr, type, stats, includeEquipment, isSpellcaster) {
 }
 
 function shouldHaveSpells(type, cr) {
-    const spellcasterTypes = ['fiend', 'celestial', 'aberration', 'fey', 'dragon'];
-    return spellcasterTypes.includes(type) && cr >= 2 && Math.random() < 0.6;
+    // Types that are commonly spellcasters
+    const commonSpellcasterTypes = ['fiend', 'celestial', 'aberration', 'fey', 'dragon', 'humanoid'];
+    
+    // Types that can sometimes be spellcasters
+    const occasionalSpellcasterTypes = ['undead', 'elemental', 'construct', 'monstrosity'];
+    
+    // Higher CR creatures are more likely to be spellcasters
+    if (cr >= 5) {
+        // High CR creatures have higher chance of being spellcasters
+        if (commonSpellcasterTypes.includes(type)) {
+            return Math.random() < 0.8; // 80% chance
+        } else if (occasionalSpellcasterTypes.includes(type)) {
+            return Math.random() < 0.4; // 40% chance
+        }
+    } else if (cr >= 2) {
+        // Medium CR creatures
+        if (commonSpellcasterTypes.includes(type)) {
+            return Math.random() < 0.6; // 60% chance
+        } else if (occasionalSpellcasterTypes.includes(type)) {
+            return Math.random() < 0.2; // 20% chance
+        }
+    }
+    
+    // Low CR creatures rarely have spells
+    return false;
 }
 
 function generateSpellsFromDatabase(cr, type) {
+    console.log('generateSpellsFromDatabase called with CR:', cr, 'Type:', type);
+    console.log('currentData.spells:', currentData.spells ? currentData.spells.length : 'undefined');
+    
     if (!currentData.spells || currentData.spells.length === 0) {
+        console.log('No spells in database, using fallback');
         return generateFallbackSpells(cr, type);
     }
     

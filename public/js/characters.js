@@ -23,11 +23,16 @@ function displayCharacters() {
     
     const characters = currentData.characters || [];
     container.innerHTML = characters.map(character => {
+        const hasPortrait = character.portraitUrl && character.portraitUrl.trim() !== '';
+        const avatarDisplay = hasPortrait 
+            ? `<img src="${character.portraitUrl}" class="character-portrait" alt="${character.name}">`
+            : `<span class="avatar-icon">${character.race ? getRaceEmoji(character.race) : '👤'}</span>`;
+        
         return `
             <div class="character-card">
                 <div class="character-header">
-                    <div class="character-avatar">
-                        <span class="avatar-icon">${character.race ? getRaceEmoji(character.race) : '👤'}</span>
+                    <div class="character-avatar ${hasPortrait ? 'has-portrait' : ''}">
+                        ${avatarDisplay}
                     </div>
                     <div class="character-info">
                         <h3>${character.name}</h3>
@@ -159,6 +164,12 @@ function showCreateCharacterModal() {
                 <input type="text" id="character-subrace" name="subrace" placeholder="e.g., High Elf, Mountain Dwarf">
             </div>
             
+            <div class="form-group">
+                <label for="character-portrait">Character Portrait</label>
+                <input type="file" id="character-portrait" name="portrait" accept="image/*" onchange="previewCharacterImage(this, 'create-preview')">
+                <div id="create-preview" class="portrait-preview" style="margin-top: 0.5rem;"></div>
+            </div>
+            
             <div class="form-row">
                 <div class="form-group">
                     <label for="character-ac">Armor Class</label>
@@ -204,7 +215,17 @@ function showCreateCharacterModal() {
 async function createCharacter(event) {
     event.preventDefault();
     
-    const formData = new FormData(event.target);
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    // Handle portrait image
+    const portraitFile = formData.get('portrait');
+    let portraitData = null;
+    
+    if (portraitFile && portraitFile.size > 0) {
+        portraitData = await fileToBase64(portraitFile);
+    }
+    
     const characterData = {
         id: generateId(),
         name: formData.get('name'),
@@ -216,6 +237,7 @@ async function createCharacter(event) {
         hp: formData.get('hp') ? parseInt(formData.get('hp')) : null,
         speed: formData.get('speed') ? parseInt(formData.get('speed')) : null,
         description: formData.get('description') || '',
+        portraitUrl: portraitData || '',
         notes: [],
         createdDate: new Date().toISOString(),
         lastModified: new Date().toISOString()
@@ -285,6 +307,14 @@ function showEditCharacterModal(characterId) {
                 <input type="text" id="edit-character-subrace" name="subrace" value="${character.subrace || ''}" placeholder="e.g., High Elf, Mountain Dwarf">
             </div>
             
+            <div class="form-group">
+                <label for="edit-character-portrait">Character Portrait</label>
+                <input type="file" id="edit-character-portrait" name="portrait" accept="image/*" onchange="previewCharacterImage(this, 'edit-preview')">
+                <div id="edit-preview" class="portrait-preview" style="margin-top: 0.5rem;">
+                    ${character.portraitUrl ? `<img src="${character.portraitUrl}" style="max-width: 200px; max-height: 200px; border-radius: 8px;">` : ''}
+                </div>
+            </div>
+            
             <div class="form-row">
                 <div class="form-group">
                     <label for="edit-character-ac">Armor Class</label>
@@ -318,7 +348,20 @@ function showEditCharacterModal(characterId) {
 async function updateCharacter(event, characterId) {
     event.preventDefault();
     
-    const formData = new FormData(event.target);
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    // Get existing character to preserve portrait if not updating
+    const character = currentData.characters.find(c => c.id === characterId);
+    
+    // Handle portrait image
+    const portraitFile = formData.get('portrait');
+    let portraitData = character?.portraitUrl || '';
+    
+    if (portraitFile && portraitFile.size > 0) {
+        portraitData = await fileToBase64(portraitFile);
+    }
+    
     const updateData = {
         name: formData.get('name'),
         level: parseInt(formData.get('level')) || 1,
@@ -329,6 +372,7 @@ async function updateCharacter(event, characterId) {
         hp: formData.get('hp') ? parseInt(formData.get('hp')) : null,
         speed: formData.get('speed') ? parseInt(formData.get('speed')) : null,
         description: formData.get('description') || '',
+        portraitUrl: portraitData,
         lastModified: new Date().toISOString()
     };
     
@@ -499,5 +543,30 @@ async function exportCharacter(characterId) {
         console.error('Export error:', error);
         alert('Error exporting character data');
     }
+}
+
+// Image handling functions
+function previewCharacterImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (!preview) return;
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #a78bfa;">`;
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
 }
 
