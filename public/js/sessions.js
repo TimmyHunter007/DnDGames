@@ -19,13 +19,10 @@ function loadSessions() {
         return new Date(b.date) - new Date(a.date);
     });
     
+    const today = new Date();
+    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
     sessionsList.innerHTML = sortedSessions.map(session => {
-        const dateText = session.date ? formatDate(session.date) : 'No date';
-        const chapterText = session.chapter ? `Chapter ${session.chapter}` : '';
-        const encounters = getSessionEncounters(session.id);
-        const encounterCount = encounters.length;
-        
-        // Determine session status based on date
         let sessionDateOnly = null;
         if (session.date) {
             // Handle ISO date strings (YYYY-MM-DD) properly to avoid timezone issues
@@ -38,27 +35,52 @@ function loadSessions() {
             }
         }
         
-        const today = new Date();
-        const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        
+        const isToday = sessionDateOnly && sessionDateOnly.getTime() === todayDateOnly.getTime();
         const isUpcoming = sessionDateOnly && sessionDateOnly > todayDateOnly;
-        const isCompleted = sessionDateOnly && sessionDateOnly <= todayDateOnly;
+        const isCompleted = sessionDateOnly && sessionDateOnly < todayDateOnly;
+
+        let statusType = 'upcoming'; // Default status
+        if (isToday) {
+            statusType = 'today';
+        } else if (isCompleted) {
+            statusType = 'completed';
+        }
         
-        let statusClass = '';
-        let statusIcon = '📖';
-        let statusText = 'Planned';
-        
-        if (isCompleted) {
-            statusClass = 'session-completed';
-            statusIcon = '✅';
-            statusText = 'Completed';
-        } else if (isUpcoming) {
+        return renderSessionCard(session, statusType);
+    }).join('');
+}
+
+// Helper function to render a session card
+function renderSessionCard(session, statusType) {
+    const dateText = session.date ? formatDate(session.date) : 'No date';
+    const chapterText = session.chapter ? `Chapter ${session.chapter}` : '';
+    const encounters = getSessionEncounters(session.id);
+    const encounterCount = encounters.length;
+    
+    // Determine status based on type
+    let statusClass = '';
+    let statusIcon = '📖';
+    let statusText = 'Planned';
+    
+    switch (statusType) {
+        case 'today':
+            statusClass = 'session-today';
+            statusIcon = '🔥';
+            statusText = 'Today';
+            break;
+        case 'upcoming':
             statusClass = 'session-upcoming';
             statusIcon = '📅';
             statusText = 'Upcoming';
-        }
-        
-        return `
+            break;
+        case 'completed':
+            statusClass = 'session-completed';
+            statusIcon = '✅';
+            statusText = 'Completed';
+            break;
+    }
+    
+    return `
         <div class="session-card ${statusClass}" onclick="showSessionDetails('${session.id}')">
             <div class="session-card-header">
                 <div class="session-status">
@@ -101,8 +123,7 @@ function loadSessions() {
                 </button>
             </div>
         </div>
-        `;
-    }).join('');
+    `;
 }
 
 function showSessionDetails(sessionId) {

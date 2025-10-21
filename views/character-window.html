@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Sheet - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b4e 100%);
+            min-height: 100vh;
+        }
+        
+        .character-window-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .character-window-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+            padding-bottom: 1rem;
+        }
+        
+        .character-window-header h1 {
+            font-family: 'Cinzel', serif;
+            color: #a78bfa;
+            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        
+        .character-window-header .character-subtitle {
+            color: #b8b8b8;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        
+        .character-sheet-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .character-sheet-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .character-sheet-section h3 {
+            color: #a78bfa;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .character-portrait-large {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .character-portrait-large img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 12px;
+            border: 3px solid #8b5cf6;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .character-portrait-large .avatar-icon {
+            font-size: 4rem;
+            color: #a78bfa;
+            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+        }
+        
+        .ability-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .ability-score-item {
+            text-align: center;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .ability-score-name {
+            font-weight: bold;
+            color: #a78bfa;
+            font-size: 0.9rem;
+        }
+        
+        .ability-score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 0.5rem 0;
+        }
+        
+        .ability-score-modifier {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+        }
+        
+        .combat-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        
+        .combat-stat-item {
+            text-align: center;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .combat-stat-label {
+            font-weight: bold;
+            color: #a78bfa;
+            font-size: 0.9rem;
+        }
+        
+        .combat-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 0.5rem 0;
+        }
+        
+        .skills-saving-throws-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .skills-list, .saving-throws-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .character-description {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+        }
+        
+        .character-description h3 {
+            text-align: left;
+        }
+        
+        .character-description p {
+            color: #e8e8e8;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .character-notes {
+            grid-column: 1 / -1;
+            margin-top: 1rem;
+        }
+        
+        .character-notes h3 {
+            text-align: left;
+        }
+        
+        .note-item {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #8b5cf6;
+        }
+        
+        .note-date {
+            color: #a78bfa;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .note-content {
+            color: #e8e8e8;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .character-sheet-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ability-scores-grid,
+            .combat-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .skills-saving-throws-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="character-window-container">
+        <div class="character-window-header">
+            <h1 id="character-name">Loading...</h1>
+            <div class="character-subtitle" id="character-subtitle"></div>
+        </div>
+        
+        <div class="character-sheet-grid" id="character-sheet-content">
+            <!-- Character content will be loaded here -->
+        </div>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        // Character window specific JavaScript
+        let characterData = null;
+        
+        // Add missing functions that are needed for character display
+        function calculateAbilityModifier(score) {
+            return Math.floor((score - 10) / 2);
+        }
+        
+        function calculateProficiencyBonus(level) {
+            // D&D 5e proficiency bonus: +2 at levels 1-4, +3 at 5-8, +4 at 9-12, +5 at 13-16, +6 at 17-20
+            if (level >= 17) return 6;
+            if (level >= 13) return 5;
+            if (level >= 9) return 4;
+            if (level >= 5) return 3;
+            return 2;
+        }
+        
+        function calculateSkillModifier(abilityScore, level, isProficient) {
+            const abilityMod = calculateAbilityModifier(abilityScore);
+            const profBonus = isProficient ? calculateProficiencyBonus(level) : 0;
+            return abilityMod + profBonus;
+        }
+        
+        function calculateSavingThrowModifier(abilityScore, level, isProficient) {
+            const abilityMod = calculateAbilityModifier(abilityScore);
+            const profBonus = isProficient ? calculateProficiencyBonus(level) : 0;
+            return abilityMod + profBonus;
+        }
+        
+        function getRaceEmoji(race) {
+            const raceEmojis = {
+                'human': '👤',
+                'elf': '🧝',
+                'dwarf': '🧔',
+                'halfling': '🧙',
+                'dragonborn': '🐲',
+                'gnome': '🧚',
+                'half-elf': '🧝‍♀️',
+                'half-orc': '👹',
+                'tiefling': '👹',
+                'orc': '👹',
+                'goblin': '👺',
+                'aasimar': '👼',
+                'genasi': '🌪️',
+                'goliath': '🗿',
+                'triton': '🧜',
+                'yuan-ti': '🐍',
+                'firbolg': '🌲',
+                'kenku': '🐦',
+                'tabaxi': '🐱',
+                'tortle': '🐢',
+                'aarakocra': '🦅',
+                'lizardfolk': '🦎',
+                'bugbear': '🐻',
+                'hobgoblin': '👺',
+                'kobold': '🐉',
+                'centaur': '🐎',
+                'minotaur': '🐂',
+                'satyr': '🐐',
+                'simic hybrid': '🧬',
+                'vedalken': '🔮',
+                'loxodon': '🐘',
+                'viashino': '🦎',
+                'gith': '👽',
+                'owlin': '🦉'
+            };
+            return raceEmojis[race?.toLowerCase()] || '👤';
+        }
+        
+        function getSkillData(skillName) {
+            const skills = [
+                { name: 'Acrobatics', ability: 'DEX' },
+                { name: 'Animal Handling', ability: 'WIS' },
+                { name: 'Arcana', ability: 'INT' },
+                { name: 'Athletics', ability: 'STR' },
+                { name: 'Deception', ability: 'CHA' },
+                { name: 'History', ability: 'INT' },
+                { name: 'Insight', ability: 'WIS' },
+                { name: 'Intimidation', ability: 'CHA' },
+                { name: 'Investigation', ability: 'INT' },
+                { name: 'Medicine', ability: 'WIS' },
+                { name: 'Nature', ability: 'INT' },
+                { name: 'Perception', ability: 'WIS' },
+                { name: 'Performance', ability: 'CHA' },
+                { name: 'Persuasion', ability: 'CHA' },
+                { name: 'Religion', ability: 'INT' },
+                { name: 'Sleight of Hand', ability: 'DEX' },
+                { name: 'Stealth', ability: 'DEX' },
+                { name: 'Survival', ability: 'WIS' }
+            ];
+            
+            return skills.find(skill => skill.name === skillName) || { ability: 'STR' };
+        }
+        
+        function renderAllSavingThrows(character) {
+            const savingThrows = [
+                { name: 'STR', fullName: 'Strength' },
+                { name: 'DEX', fullName: 'Dexterity' },
+                { name: 'CON', fullName: 'Constitution' },
+                { name: 'INT', fullName: 'Intelligence' },
+                { name: 'WIS', fullName: 'Wisdom' },
+                { name: 'CHA', fullName: 'Charisma' }
+            ];
+            
+            const proficientSavingThrows = character.savingThrows || [];
+            
+            return savingThrows.map(savingThrow => {
+                const abilityScore = character[savingThrow.name.toLowerCase()] || 10;
+                const isProficient = proficientSavingThrows.includes(savingThrow.name);
+                const modifier = calculateSavingThrowModifier(
+                    abilityScore,
+                    character.level || 1,
+                    isProficient
+                );
+                
+                const badgeClass = isProficient ? 'saving-throw-badge' : 'saving-throw-badge non-proficient';
+                return `<span class="${badgeClass}">${savingThrow.name} ${modifier >= 0 ? '+' : ''}${modifier}</span>`;
+            }).join('');
+        }
+        
+        function renderAllSkills(character) {
+            const skills = [
+                { name: 'Acrobatics', ability: 'DEX' },
+                { name: 'Animal Handling', ability: 'WIS' },
+                { name: 'Arcana', ability: 'INT' },
+                { name: 'Athletics', ability: 'STR' },
+                { name: 'Deception', ability: 'CHA' },
+                { name: 'History', ability: 'INT' },
+                { name: 'Insight', ability: 'WIS' },
+                { name: 'Intimidation', ability: 'CHA' },
+                { name: 'Investigation', ability: 'INT' },
+                { name: 'Medicine', ability: 'WIS' },
+                { name: 'Nature', ability: 'INT' },
+                { name: 'Perception', ability: 'WIS' },
+                { name: 'Performance', ability: 'CHA' },
+                { name: 'Persuasion', ability: 'CHA' },
+                { name: 'Religion', ability: 'INT' },
+                { name: 'Sleight of Hand', ability: 'DEX' },
+                { name: 'Stealth', ability: 'DEX' },
+                { name: 'Survival', ability: 'WIS' }
+            ];
+            
+            const proficientSkills = character.skills || [];
+            
+            return skills.map(skill => {
+                const abilityScore = character[skill.ability.toLowerCase()] || 10;
+                const isProficient = proficientSkills.includes(skill.name);
+                const modifier = calculateSkillModifier(
+                    abilityScore,
+                    character.level || 1,
+                    isProficient
+                );
+                
+                const badgeClass = isProficient ? 'skill-badge' : 'skill-badge non-proficient';
+                return `<span class="${badgeClass}">${skill.name} ${modifier >= 0 ? '+' : ''}${modifier}</span>`;
+            }).join('');
+        }
+        
+        // Get character ID from URL parameters
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        
+        async function loadCharacterData() {
+            const characterId = getUrlParameter('characterId');
+            const campaignId = getUrlParameter('campaignId');
+            
+            console.log('🔍 Character window - Loading character data');
+            console.log('🆔 Character ID:', characterId);
+            console.log('📁 Campaign ID:', campaignId);
+            
+            if (!characterId) {
+                console.log('❌ No character ID provided');
+                document.getElementById('character-name').textContent = 'Character Not Found';
+                return;
+            }
+            
+            const apiUrl = `/api/characters/${characterId}?campaignId=${campaignId}`;
+            console.log('🌐 API URL:', apiUrl);
+            
+            try {
+                console.log('📡 Making API request...');
+                const response = await fetch(apiUrl);
+                console.log('📊 Response status:', response.status);
+                console.log('📊 Response ok:', response.ok);
+                
+                if (response.ok) {
+                    characterData = await response.json();
+                    console.log('✅ Character data loaded:', characterData);
+                    displayCharacterSheet();
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ API Error:', response.status, errorText);
+                    document.getElementById('character-name').textContent = 'Error Loading Character';
+                }
+            } catch (error) {
+                console.error('❌ Network Error loading character:', error);
+                document.getElementById('character-name').textContent = 'Error Loading Character';
+            }
+        }
+        
+        function displayCharacterSheet() {
+            console.log('🎨 Displaying character sheet...');
+            console.log('📊 Character data:', characterData);
+            console.log('📊 Status effects:', characterData.statusEffects);
+            console.log('📊 Old status field:', characterData.status);
+            
+            if (!characterData) {
+                console.log('❌ No character data to display');
+                return;
+            }
+            
+            // Update header
+            document.getElementById('character-name').textContent = characterData.name;
+            document.getElementById('character-subtitle').textContent = 
+                `${characterData.race || 'Unknown Race'} ${characterData.class || 'Unknown Class'} • Level ${characterData.level || 1}`;
+            
+            console.log('✅ Header updated');
+            
+            // Create character sheet content
+            const content = document.getElementById('character-sheet-content');
+            content.innerHTML = `
+                <div class="character-sheet-section">
+                    <div class="character-portrait-large">
+                        ${characterData.portraitUrl ? 
+                            `<img src="${characterData.portraitUrl}" alt="${characterData.name}">` :
+                            `<span class="avatar-icon">${getRaceEmoji(characterData.race)}</span>`
+                        }
+                    </div>
+                    
+                    <h3>Ability Scores</h3>
+                    <div class="ability-scores-grid">
+                        ${renderAbilityScores(characterData)}
+                    </div>
+                </div>
+                
+                <div class="character-sheet-section">
+                    <h3>Combat Stats</h3>
+                    <div class="combat-stats-grid">
+                        <div class="combat-stat-item">
+                            <div class="combat-stat-label">Armor Class</div>
+                            <div class="combat-stat-value">${characterData.ac || '--'}</div>
+                        </div>
+                        <div class="combat-stat-item">
+                            <div class="combat-stat-label">Hit Points</div>
+                            <div class="combat-stat-value">${characterData.hp || '--'}</div>
+                        </div>
+                        <div class="combat-stat-item">
+                            <div class="combat-stat-label">Speed</div>
+                            <div class="combat-stat-value">${characterData.speed || '--'}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="character-sheet-section">
+                    <h3>Saving Throws</h3>
+                    <div class="saving-throws-list">
+                        ${renderAllSavingThrows(characterData)}
+                    </div>
+                </div>
+                
+                <div class="character-sheet-section">
+                    <h3>Skills</h3>
+                    <div class="skills-list">
+                        ${renderAllSkills(characterData)}
+                    </div>
+                </div>
+                
+                ${characterData.description ? `
+                <div class="character-sheet-section character-description">
+                    <h3>Description</h3>
+                    <p>${characterData.description}</p>
+                </div>
+                ` : ''}
+                
+                ${characterData.notes && characterData.notes.length > 0 ? `
+                <div class="character-sheet-section character-notes">
+                    <h3>Notes</h3>
+                    ${characterData.notes.map(note => `
+                        <div class="note-item">
+                            <div class="note-date">${formatDate(note.date)}</div>
+                            <div class="note-content">${note.content}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+            `;
+        }
+        
+        function renderAbilityScores(character) {
+            const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+            const abilityNames = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+            
+            return abilities.map((ability, index) => {
+                const score = character[ability] || 10;
+                const modifier = calculateAbilityModifier(score);
+                const modifierText = modifier >= 0 ? `+${modifier}` : `${modifier}`;
+                
+                return `
+                    <div class="ability-score-item">
+                        <div class="ability-score-name">${abilityNames[index]}</div>
+                        <div class="ability-score-value">${score}</div>
+                        <div class="ability-score-modifier">${modifierText}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        
+        // Load character data when page loads
+        document.addEventListener('DOMContentLoaded', loadCharacterData);
+    </script>
+</body>
+</html>

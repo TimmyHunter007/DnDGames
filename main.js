@@ -1,10 +1,11 @@
-const { app, BrowserWindow, Menu, Tray, shell } = require('electron');
+const { app, BrowserWindow, Menu, Tray, shell, ipcMain } = require('electron');
 const path = require('path');
 const net = require('net');
 
 let mainWindow = null;
 let tray = null;
 let serverPort = null;
+let characterWindows = new Map(); // Track character windows
 
 // Get user data path for campaign storage
 const userDataPath = app.getPath('userData');
@@ -348,6 +349,89 @@ function createTray() {
 }
 
 // App lifecycle
+// Create character window function
+function createCharacterWindow(characterId, campaignId) {
+    
+    const characterWindow = new BrowserWindow({
+        width: 1000,
+        height: 800,
+        minWidth: 800,
+        minHeight: 600,
+        icon: path.join(__dirname, 'public', 'icon.png'),
+        backgroundColor: '#1a1a2e',
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            enableRemoteModule: false,
+            preload: path.join(__dirname, 'preload.js'),
+            devTools: true
+        },
+        show: false,
+        title: `Character Sheet - ${characterId}`,
+        parent: mainWindow, // Make it a child window
+        modal: false // Allow multiple character windows
+    });
+    
+    
+    // Load the character window page
+    const characterUrl = `http://localhost:${serverPort}/character-window?characterId=${characterId}&campaignId=${campaignId}`;
+    characterWindow.loadURL(characterUrl);
+    
+    // Show window when ready
+    characterWindow.once('ready-to-show', () => {
+        characterWindow.show();
+    });
+    
+    // Handle load errors
+    characterWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+        console.error('❌ Failed to load character window:', errorCode, errorDescription, validatedURL);
+    });
+    
+    // Handle successful load
+    characterWindow.webContents.on('did-finish-load', () => {
+        
+        // Add keyboard shortcut for dev tools (F12)
+        characterWindow.webContents.on('before-input-event', (event, input) => {
+            if (input.type === 'keyDown' && input.key === 'F12') {
+                if (characterWindow.webContents.isDevToolsOpened()) {
+                    characterWindow.webContents.closeDevTools();
+                } else {
+                    characterWindow.webContents.openDevTools();
+                }
+            }
+        });
+    });
+    
+    // Clean up when window is closed
+    characterWindow.on('closed', () => {
+        characterWindows.delete(characterId);
+    });
+    
+    // Store reference to the window
+    characterWindows.set(characterId, characterWindow);
+    
+    return characterWindow;
+}
+
+// IPC handler for opening character windows
+ipcMain.on('open-character-window', (event, data) => {
+    const { characterId, campaignId } = data;
+    
+    // Check if window already exists for this character
+    if (characterWindows.has(characterId)) {
+        const existingWindow = characterWindows.get(characterId);
+        if (!existingWindow.isDestroyed()) {
+            existingWindow.focus();
+            return;
+        } else {
+            characterWindows.delete(characterId);
+        }
+    }
+    
+    // Create new character window
+    createCharacterWindow(characterId, campaignId);
+});
+
 app.whenReady().then(async () => {
     try {
         console.log('🎲 Starting D&D DM Toolkit...');

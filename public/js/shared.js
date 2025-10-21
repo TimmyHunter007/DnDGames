@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     await loadData();
     initializeCampaignSelector();
     initializeNavigation();
+    initializeReturnToTop();
     initializePage();
 });
 
@@ -248,6 +249,30 @@ function initializeNavigation() {
             });
         });
     }
+}
+
+// Return to Top Button
+function initializeReturnToTop() {
+    const returnToTopBtn = document.getElementById('returnToTop');
+    
+    if (!returnToTopBtn) return;
+    
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            returnToTopBtn.classList.add('visible');
+        } else {
+            returnToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    // Scroll to top when clicked
+    returnToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 }
 
 // Page-specific initialization

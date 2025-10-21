@@ -12,6 +12,70 @@ function updateQuickStats() {
     document.getElementById('enemy-count').textContent = currentData.enemies.length;
     document.getElementById('note-count').textContent = currentData.notes.length;
     document.getElementById('item-count').textContent = currentData.items.length;
+    
+    // Update player character stats
+    updatePlayerStats();
+}
+
+// Update player character statistics
+function updatePlayerStats() {
+    const playerStatsDiv = document.getElementById('player-stats');
+    if (!playerStatsDiv) return;
+    
+    const characters = currentData.characters || [];
+    
+    if (characters.length === 0) {
+        playerStatsDiv.innerHTML = '<p style="color: #b8b8b8; text-align: center; padding: 1rem;">No player characters created yet.</p>';
+        return;
+    }
+    
+    // Calculate stats
+    const totalCharacters = characters.length;
+    const averageLevel = characters.length > 0 ? 
+        Math.round(characters.reduce((sum, char) => sum + (parseInt(char.level) || 1), 0) / characters.length * 10) / 10 : 0;
+    
+    const levelRange = characters.length > 0 ? {
+        min: Math.min(...characters.map(char => parseInt(char.level) || 1)),
+        max: Math.max(...characters.map(char => parseInt(char.level) || 1))
+    } : { min: 0, max: 0 };
+    
+    const classes = [...new Set(characters.map(char => char.class).filter(Boolean))];
+    const races = [...new Set(characters.map(char => char.race).filter(Boolean))];
+    
+    // Create stats display
+    playerStatsDiv.innerHTML = `
+        <div class="player-stats-grid">
+            <div class="player-stat-item">
+                <div class="player-stat-number">${totalCharacters}</div>
+                <div class="player-stat-label">Total Characters</div>
+            </div>
+            <div class="player-stat-item">
+                <div class="player-stat-number">${averageLevel}</div>
+                <div class="player-stat-label">Average Level</div>
+            </div>
+            <div class="player-stat-item">
+                <div class="player-stat-number">${levelRange.min}-${levelRange.max}</div>
+                <div class="player-stat-label">Level Range</div>
+            </div>
+            <div class="player-stat-item">
+                <div class="player-stat-number">${classes.length}</div>
+                <div class="player-stat-label">Unique Classes</div>
+            </div>
+            <div class="player-stat-item">
+                <div class="player-stat-number">${races.length}</div>
+                <div class="player-stat-label">Unique Races</div>
+            </div>
+        </div>
+        
+        <div class="player-details">
+            <div class="player-classes">
+                <strong>Classes:</strong> ${classes.length > 0 ? classes.join(', ') : 'None'}
+            </div>
+            <div class="player-races">
+                <strong>Races:</strong> ${races.length > 0 ? races.join(', ') : 'None'}
+            </div>
+        </div>
+    `;
 }
 
 function showNoCampaignMessage() {

@@ -105,6 +105,10 @@ app.get('/characters', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'characters.html'));
 });
 
+app.get('/character-window', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'character-window.html'));
+});
+
 // API routes for campaign management
 app.get('/api/campaigns', async (req, res) => {
     try {
@@ -594,6 +598,38 @@ app.get('/api/characters', async (req, res) => {
     } catch (error) {
         console.error('Error fetching characters:', error);
         res.status(500).json({ error: 'Failed to fetch characters' });
+    }
+});
+
+
+app.get('/api/characters/:characterId', async (req, res) => {
+    try {
+        const { characterId } = req.params;
+        const campaignId = req.query.campaignId;
+        
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const charactersFile = path.join(campaignDir, 'characters.json');
+        
+        try {
+            const content = await fs.readFile(charactersFile, 'utf8');
+            const characters = JSON.parse(content);
+            const character = characters.find(c => c.id === characterId);
+            
+            if (!character) {
+                return res.status(404).json({ error: 'Character not found' });
+            }
+            
+            res.json(character);
+        } catch (error) {
+            return res.status(404).json({ error: 'Characters not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching character:', error);
+        res.status(500).json({ error: 'Failed to fetch character' });
     }
 });
 

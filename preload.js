@@ -15,6 +15,17 @@ contextBridge.exposeInMainWorld('electron', {
         node: process.versions.node,
         chrome: process.versions.chrome,
         electron: process.versions.electron
+    },
+    
+    // IPC communication for character windows
+    ipcRenderer: {
+        send: (channel, data) => {
+            // Whitelist channels
+            const validChannels = ['open-character-window'];
+            if (validChannels.includes(channel)) {
+                ipcRenderer.send(channel, data);
+            }
+        }
     }
 });
 

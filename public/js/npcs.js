@@ -221,93 +221,106 @@ function showNPCModal(npcId = null) {
     
     const content = `
         <form onsubmit="saveNPC(event, ${npcId ? `'${npcId}'` : 'null'})">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Name *</label>
-                    <input type="text" name="name" value="${npc ? npc.name : ''}" required>
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" name="name" value="${npc ? npc.name : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Race *</label>
+                        <input type="text" name="race" value="${npc ? npc.race : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Class</label>
+                        <input type="text" name="class" value="${npc ? npc.class : ''}">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Race *</label>
-                    <input type="text" name="race" value="${npc ? npc.race : ''}" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Class</label>
-                    <input type="text" name="class" value="${npc ? npc.class : ''}">
-                </div>
-                <div class="form-group">
-                    <label>Level</label>
-                    <input type="number" name="level" value="${npc ? npc.level : 1}" min="1" max="20">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group" style="flex: 2;">
-                    <label>Faction</label>
-                    <input type="text" name="faction" value="${npc ? npc.faction : ''}" placeholder="e.g., Zhentarim, Harpers, City Watch">
-                </div>
-                <div class="form-group" style="flex: 1; display: flex; align-items: center; padding-top: 1.5rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
-                        <input type="checkbox" name="factionLeader" ${npc && npc.factionLeader === 'true' ? 'checked' : ''} value="true" style="accent-color: #d4af37;">
-                        Faction Leader
-                    </label>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>AC</label>
-                    <input type="number" name="ac" value="${npc ? npc.ac : ''}">
-                </div>
-                <div class="form-group">
-                    <label>HP</label>
-                    <input type="number" name="hp" value="${npc ? npc.hp : ''}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Level</label>
+                        <input type="number" name="level" value="${npc ? npc.level : 1}" min="1" max="20">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label>Faction</label>
+                        <input type="text" name="faction" value="${npc ? npc.faction : ''}" placeholder="e.g., Zhentarim, Harpers, City Watch">
+                    </div>
+                    <div class="form-group" style="flex: 1; display: flex; align-items: center; padding-top: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
+                            <input type="checkbox" name="factionLeader" ${npc && npc.factionLeader === 'true' ? 'checked' : ''} value="true" style="accent-color: #d4af37;">
+                            Faction Leader
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>STR</label>
-                    <input type="number" name="str" value="${npc ? npc.str : ''}">
-                </div>
-                <div class="form-group">
-                    <label>DEX</label>
-                    <input type="number" name="dex" value="${npc ? npc.dex : ''}">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>CON</label>
-                    <input type="number" name="con" value="${npc ? npc.con : ''}">
-                </div>
-                <div class="form-group">
-                    <label>INT</label>
-                    <input type="number" name="int" value="${npc ? npc.int : ''}">
+            
+            <div class="form-section">
+                <h3>Combat Stats</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>AC</label>
+                        <input type="number" name="ac" value="${npc ? npc.ac : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>HP</label>
+                        <input type="number" name="hp" value="${npc ? npc.hp : ''}">
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
+            
+            <div class="form-section">
+                <h3>Ability Scores</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>STR</label>
+                        <input type="number" name="str" value="${npc ? npc.str : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>DEX</label>
+                        <input type="number" name="dex" value="${npc ? npc.dex : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>CON</label>
+                        <input type="number" name="con" value="${npc ? npc.con : ''}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>INT</label>
+                        <input type="number" name="int" value="${npc ? npc.int : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>WIS</label>
+                        <input type="number" name="wis" value="${npc ? npc.wis : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>CHA</label>
+                        <input type="number" name="cha" value="${npc ? npc.cha : ''}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Description & Notes</h3>
                 <div class="form-group">
-                    <label>WIS</label>
-                    <input type="number" name="wis" value="${npc ? npc.wis : ''}">
+                    <label>Description</label>
+                    <textarea name="description" rows="3">${npc ? npc.description : ''}</textarea>
                 </div>
                 <div class="form-group">
-                    <label>CHA</label>
-                    <input type="number" name="cha" value="${npc ? npc.cha : ''}">
+                    <label>Notes</label>
+                    <textarea name="notes" rows="3">${npc ? npc.notes : ''}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <input type="text" name="tags" value="${npc ? (npc.tags ? npc.tags.join(', ') : '') : ''}" placeholder="e.g., merchant, noble, quest giver, tavern">
+                    <small style="color: #b8b8b8; font-size: 0.8rem;">Separate multiple tags with commas</small>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="3">${npc ? npc.description : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Notes</label>
-                <textarea name="notes" rows="3">${npc ? npc.notes : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Tags</label>
-                <input type="text" name="tags" value="${npc ? (npc.tags ? npc.tags.join(', ') : '') : ''}" placeholder="e.g., merchant, noble, quest giver, tavern">
-                <small style="color: #b8b8b8; font-size: 0.8rem;">Separate multiple tags with commas</small>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn-primary">${isEdit ? 'Update' : 'Create'} NPC</button>
+            
+            <div class="modal-actions">
+                <button type="submit" class="action-btn">${isEdit ? 'Update' : 'Create'} NPC</button>
+                <button type="button" class="action-btn btn-secondary" onclick="closeModal(this)">Cancel</button>
             </div>
         </form>
     `;

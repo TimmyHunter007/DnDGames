@@ -144,62 +144,71 @@ function showItemModal(itemId = null) {
     
     const content = `
         <form onsubmit="saveItem(event, ${itemId ? `'${itemId}'` : 'null'})">
-            <div class="form-row">
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" name="name" value="${item ? item.name : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select name="type">
+                            <option value="Weapon" ${item && item.type === 'Weapon' ? 'selected' : ''}>Weapon</option>
+                            <option value="Armor" ${item && item.type === 'Armor' ? 'selected' : ''}>Armor</option>
+                            <option value="Potion" ${item && item.type === 'Potion' ? 'selected' : ''}>Potion</option>
+                            <option value="Ring" ${item && item.type === 'Ring' ? 'selected' : ''}>Ring</option>
+                            <option value="Wand" ${item && item.type === 'Wand' ? 'selected' : ''}>Wand</option>
+                            <option value="Staff" ${item && item.type === 'Staff' ? 'selected' : ''}>Staff</option>
+                            <option value="Scroll" ${item && item.type === 'Scroll' ? 'selected' : ''}>Scroll</option>
+                            <option value="Other" ${item && item.type === 'Other' ? 'selected' : ''}>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Rarity</label>
+                        <select name="rarity">
+                            <option value="Common" ${item && item.rarity === 'Common' ? 'selected' : ''}>Common</option>
+                            <option value="Uncommon" ${item && item.rarity === 'Uncommon' ? 'selected' : ''}>Uncommon</option>
+                            <option value="Rare" ${item && item.rarity === 'Rare' ? 'selected' : ''}>Rare</option>
+                            <option value="Very Rare" ${item && item.rarity === 'Very Rare' ? 'selected' : ''}>Very Rare</option>
+                            <option value="Legendary" ${item && item.rarity === 'Legendary' ? 'selected' : ''}>Legendary</option>
+                            <option value="Artifact" ${item && item.rarity === 'Artifact' ? 'selected' : ''}>Artifact</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Attunement</label>
+                        <select name="attunement">
+                            <option value="" ${!item || !item.attunement ? 'selected' : ''}>None Required</option>
+                            <option value="Yes" ${item && item.attunement === 'Yes' ? 'selected' : ''}>Yes</option>
+                            <option value="By Spellcaster" ${item && item.attunement === 'By Spellcaster' ? 'selected' : ''}>By Spellcaster</option>
+                            <option value="By Specific Class" ${item && item.attunement === 'By Specific Class' ? 'selected' : ''}>By Specific Class</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Details & Effects</h3>
                 <div class="form-group">
-                    <label>Name *</label>
-                    <input type="text" name="name" value="${item ? item.name : ''}" required>
+                    <label>Description</label>
+                    <textarea name="description" rows="4">${item ? item.description : ''}</textarea>
                 </div>
                 <div class="form-group">
-                    <label>Type</label>
-                    <select name="type">
-                        <option value="Weapon" ${item && item.type === 'Weapon' ? 'selected' : ''}>Weapon</option>
-                        <option value="Armor" ${item && item.type === 'Armor' ? 'selected' : ''}>Armor</option>
-                        <option value="Potion" ${item && item.type === 'Potion' ? 'selected' : ''}>Potion</option>
-                        <option value="Ring" ${item && item.type === 'Ring' ? 'selected' : ''}>Ring</option>
-                        <option value="Wand" ${item && item.type === 'Wand' ? 'selected' : ''}>Wand</option>
-                        <option value="Staff" ${item && item.type === 'Staff' ? 'selected' : ''}>Staff</option>
-                        <option value="Scroll" ${item && item.type === 'Scroll' ? 'selected' : ''}>Scroll</option>
-                        <option value="Other" ${item && item.type === 'Other' ? 'selected' : ''}>Other</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Rarity</label>
-                    <select name="rarity">
-                        <option value="Common" ${item && item.rarity === 'Common' ? 'selected' : ''}>Common</option>
-                        <option value="Uncommon" ${item && item.rarity === 'Uncommon' ? 'selected' : ''}>Uncommon</option>
-                        <option value="Rare" ${item && item.rarity === 'Rare' ? 'selected' : ''}>Rare</option>
-                        <option value="Very Rare" ${item && item.rarity === 'Very Rare' ? 'selected' : ''}>Very Rare</option>
-                        <option value="Legendary" ${item && item.rarity === 'Legendary' ? 'selected' : ''}>Legendary</option>
-                        <option value="Artifact" ${item && item.rarity === 'Artifact' ? 'selected' : ''}>Artifact</option>
-                    </select>
+                    <label>Effects</label>
+                    <textarea name="effects" rows="4" placeholder="Describe magical effects, bonuses, or special abilities">${item ? item.effects : ''}</textarea>
                 </div>
                 <div class="form-group">
-                    <label>Attunement</label>
-                    <select name="attunement">
-                        <option value="" ${!item || !item.attunement ? 'selected' : ''}>None Required</option>
-                        <option value="Yes" ${item && item.attunement === 'Yes' ? 'selected' : ''}>Yes</option>
-                        <option value="By Spellcaster" ${item && item.attunement === 'By Spellcaster' ? 'selected' : ''}>By Spellcaster</option>
-                        <option value="By Specific Class" ${item && item.attunement === 'By Specific Class' ? 'selected' : ''}>By Specific Class</option>
-                    </select>
+                    <label>Tags</label>
+                    <input type="text" name="tags" value="${item ? (item.tags ? item.tags.join(', ') : '') : ''}" placeholder="e.g., magic, combat, utility, cursed">
+                    <small style="color: #b8b8b8; font-size: 0.8rem;">Separate multiple tags with commas</small>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="4">${item ? item.description : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Effects</label>
-                <textarea name="effects" rows="4" placeholder="Describe magical effects, bonuses, or special abilities">${item ? item.effects : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Tags</label>
-                <input type="text" name="tags" value="${item ? (item.tags ? item.tags.join(', ') : '') : ''}" placeholder="e.g., magic, combat, utility, cursed">
-                <small style="color: #b8b8b8; font-size: 0.8rem;">Separate multiple tags with commas</small>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn-primary">${isEdit ? 'Update' : 'Create'} Item</button>
+            
+            <div class="modal-actions">
+                <button type="submit" class="action-btn">${isEdit ? 'Update' : 'Create'} Item</button>
+                <button type="button" class="action-btn btn-secondary" onclick="closeModal(this)">Cancel</button>
             </div>
         </form>
     `;

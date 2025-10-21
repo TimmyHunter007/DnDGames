@@ -327,85 +327,100 @@ function showEnemyModal(enemyId = null) {
     
     const content = `
         <form onsubmit="saveEnemy(event, ${enemyId ? `'${enemyId}'` : 'null'})">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Name *</label>
-                    <input type="text" name="name" value="${enemy ? enemy.name : ''}" required>
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" name="name" value="${enemy ? enemy.name : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <input type="text" name="type" value="${enemy ? enemy.type : ''}" placeholder="e.g., Dragon, Goblin">
+                    </div>
+                    <div class="form-group">
+                        <label>Challenge Rating</label>
+                        <input type="text" name="cr" value="${enemy ? enemy.cr : ''}" placeholder="e.g., 1/2, 1, 5">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Type</label>
-                    <input type="text" name="type" value="${enemy ? enemy.type : ''}" placeholder="e.g., Dragon, Goblin">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Challenge Rating (CR)</label>
-                    <input type="text" name="cr" value="${enemy ? enemy.cr : ''}" placeholder="e.g., 1/2, 1, 5">
-                </div>
-                <div class="form-group">
-                    <label>Armor Class (AC)</label>
-                    <input type="number" name="ac" value="${enemy ? enemy.ac : ''}">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Hit Points</label>
-                    <input type="number" name="hp" value="${enemy ? enemy.hp : ''}">
-                </div>
-                <div class="form-group">
-                    <label>Speed</label>
-                    <input type="text" name="speed" value="${enemy ? enemy.speed : ''}" placeholder="e.g., 30 ft., fly 60 ft.">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Speed</label>
+                        <input type="text" name="speed" value="${enemy ? enemy.speed : ''}" placeholder="e.g., 30 ft., fly 60 ft.">
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>STR</label>
-                    <input type="number" name="str" value="${enemy ? enemy.str : ''}">
-                </div>
-                <div class="form-group">
-                    <label>DEX</label>
-                    <input type="number" name="dex" value="${enemy ? enemy.dex : ''}">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>CON</label>
-                    <input type="number" name="con" value="${enemy ? enemy.con : ''}">
-                </div>
-                <div class="form-group">
-                    <label>INT</label>
-                    <input type="number" name="int" value="${enemy ? enemy.int : ''}">
+            
+            <div class="form-section">
+                <h3>Combat Stats</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Armor Class (AC)</label>
+                        <input type="number" name="ac" value="${enemy ? enemy.ac : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Hit Points</label>
+                        <input type="number" name="hp" value="${enemy ? enemy.hp : ''}">
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
+            
+            <div class="form-section">
+                <h3>Ability Scores</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>STR</label>
+                        <input type="number" name="str" value="${enemy ? enemy.str : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>DEX</label>
+                        <input type="number" name="dex" value="${enemy ? enemy.dex : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>CON</label>
+                        <input type="number" name="con" value="${enemy ? enemy.con : ''}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>INT</label>
+                        <input type="number" name="int" value="${enemy ? enemy.int : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>WIS</label>
+                        <input type="number" name="wis" value="${enemy ? enemy.wis : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>CHA</label>
+                        <input type="number" name="cha" value="${enemy ? enemy.cha : ''}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Abilities & Description</h3>
                 <div class="form-group">
-                    <label>WIS</label>
-                    <input type="number" name="wis" value="${enemy ? enemy.wis : ''}">
+                    <label>Attacks</label>
+                    <textarea name="attacks" rows="3" placeholder="Describe attacks, damage, and effects">${enemy ? enemy.attacks : ''}</textarea>
                 </div>
                 <div class="form-group">
-                    <label>CHA</label>
-                    <input type="number" name="cha" value="${enemy ? enemy.cha : ''}">
+                    <label>Special Abilities</label>
+                    <textarea name="abilities" rows="3" placeholder="Describe special abilities, spells, etc.">${enemy ? enemy.abilities : ''}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <input type="text" name="tags" value="${enemy ? (enemy.tags ? enemy.tags.join(', ') : '') : ''}" placeholder="e.g., undead, boss, dungeon, forest">
+                    <small style="color: #b8b8b8; font-size: 0.8rem;">Separate multiple tags with commas</small>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3">${enemy ? enemy.description : ''}</textarea>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Attacks</label>
-                <textarea name="attacks" rows="3" placeholder="Describe attacks, damage, and effects">${enemy ? enemy.attacks : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Special Abilities</label>
-                <textarea name="abilities" rows="3" placeholder="Describe special abilities, spells, etc.">${enemy ? enemy.abilities : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <label>Tags</label>
-                <input type="text" name="tags" value="${enemy ? (enemy.tags ? enemy.tags.join(', ') : '') : ''}" placeholder="e.g., undead, boss, dungeon, forest">
-                <small style="color: #b8b8b8; font-size: 0.8rem;">Separate multiple tags with commas</small>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="3">${enemy ? enemy.description : ''}</textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn-primary">${isEdit ? 'Update' : 'Create'} Enemy</button>
+            
+            <div class="modal-actions">
+                <button type="submit" class="action-btn">${isEdit ? 'Update' : 'Create'} Enemy</button>
+                <button type="button" class="action-btn btn-secondary" onclick="closeModal(this)">Cancel</button>
             </div>
         </form>
     `;
