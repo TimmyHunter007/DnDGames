@@ -9,6 +9,10 @@ const { contextBridge, ipcRenderer } = require('electron');
 // Expose protected methods that allow the renderer process to use
 // ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electron', {
+    // Open board window
+    openBoardWindow: () => {
+        ipcRenderer.send('open-board-window');
+    },
     // Example: Add any Electron-specific APIs you want to expose
     platform: process.platform,
     versions: {
@@ -21,7 +25,7 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer: {
         send: (channel, data) => {
             // Whitelist channels
-            const validChannels = ['open-character-window'];
+            const validChannels = ['open-character-window', 'open-board-window'];
             if (validChannels.includes(channel)) {
                 ipcRenderer.send(channel, data);
             }

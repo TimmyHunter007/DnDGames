@@ -260,13 +260,13 @@ function createWindow() {
     const menu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(menu);
     
-    // Load the app
-    mainWindow.loadURL(`http://localhost:${serverPort}`);
+    // Load the loading screen first
+    mainWindow.loadFile(path.join(__dirname, 'views', 'loading.html'));
     
-    // Show window when ready
+    // Show window immediately for loading screen
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
-        console.log('✅ Window loaded successfully');
+        console.log('✅ Loading screen shown');
     });
     
     // Prevent external links from opening in the app
@@ -413,6 +413,19 @@ function createCharacterWindow(characterId, campaignId) {
     return characterWindow;
 }
 
+// Function to transition from loading screen to main app
+// This is called after the server is ready to provide a smooth user experience
+function loadMainApp() {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        console.log('🔄 Transitioning to main app...');
+        mainWindow.loadURL(`http://localhost:${serverPort}`);
+        
+        mainWindow.webContents.once('did-finish-load', () => {
+            console.log('✅ Main app loaded successfully');
+        });
+    }
+}
+
 // IPC handler for opening character windows
 ipcMain.on('open-character-window', (event, data) => {
     const { characterId, campaignId } = data;
@@ -436,11 +449,16 @@ app.whenReady().then(async () => {
     try {
         console.log('🎲 Starting D&D DM Toolkit...');
         
+        // Create window first to show loading screen
+        createWindow();
+        
         // Start Express server
         await startServer();
         
-        // Create window
-        createWindow();
+        // Wait a bit more for server to be fully ready, then load main app
+        setTimeout(() => {
+            loadMainApp();
+        }, 1500);
         
         // Create system tray
         createTray();

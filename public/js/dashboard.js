@@ -1,5 +1,15 @@
 // Dashboard-specific JavaScript
 
+// Open board window
+function openBoardWindow() {
+    if (window.electron && window.electron.openBoardWindow) {
+        window.electron.openBoardWindow();
+    } else {
+        // Fallback for web version
+        window.open('/board', '_blank', 'width=1200,height=900,resizable=yes,scrollbars=yes');
+    }
+}
+
 // Update quick stats
 function updateQuickStats() {
     // Check if we have an active campaign

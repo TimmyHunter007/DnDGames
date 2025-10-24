@@ -6,6 +6,7 @@
     <title>Encounters - D&D DM Toolkit</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="/js/theme.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -13,6 +14,9 @@
         <nav class="navbar">
             <div class="nav-brand">
                 <h1>D&D DM Toolkit</h1>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
             </div>
             <div class="nav-dropdown-container">
                 <button class="nav-dropdown-toggle" id="navDropdownToggle">
@@ -31,6 +35,7 @@
                     <a href="/items" class="nav-link">Items</a>
                     <a href="/notes" class="nav-link">Notes</a>
                     <a href="/characters" class="nav-link">Characters</a>
+                    <a href="#" class="nav-link" onclick="openBoardWindow(); return false;">Battle Board</a>
                     <a href="/campaigns" class="nav-link">Campaigns</a>
                 </div>
             </div>

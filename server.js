@@ -60,6 +60,55 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
 
+// API routes must come before HTML routes to avoid conflicts
+app.get('/api/npcs', async (req, res) => {
+    try {
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const npcsFile = path.join(campaignDir, 'npcs.json');
+        
+        try {
+            const content = await fs.readFile(npcsFile, 'utf8');
+            const npcs = JSON.parse(content);
+            res.json(npcs);
+        } catch (error) {
+            // File doesn't exist yet, return empty array
+            res.json([]);
+        }
+    } catch (error) {
+        console.error('Error fetching NPCs:', error);
+        res.status(500).json({ error: 'Failed to fetch NPCs' });
+    }
+});
+
+app.get('/api/enemies', async (req, res) => {
+    try {
+        const campaignId = req.query.campaignId;
+        if (!campaignId) {
+            return res.status(400).json({ error: 'No campaign specified' });
+        }
+        
+        const campaignDir = await ensureCampaignDir(campaignId);
+        const enemiesFile = path.join(campaignDir, 'enemies.json');
+        
+        try {
+            const content = await fs.readFile(enemiesFile, 'utf8');
+            const enemies = JSON.parse(content);
+            res.json(enemies);
+        } catch (error) {
+            // File doesn't exist yet, return empty array
+            res.json([]);
+        }
+    } catch (error) {
+        console.error('Error fetching enemies:', error);
+        res.status(500).json({ error: 'Failed to fetch enemies' });
+    }
+});
+
 app.get('/npcs', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'npcs.html'));
 });
@@ -107,6 +156,10 @@ app.get('/characters', (req, res) => {
 
 app.get('/character-window', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'character-window.html'));
+});
+
+app.get('/board', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'board.html'));
 });
 
 // API routes for campaign management
@@ -859,6 +912,7 @@ app.get('/api/characters/:characterId/export', async (req, res) => {
         res.status(500).json({ error: 'Failed to export character' });
     }
 });
+
 
 // Helper function to generate IDs
 function generateId() {

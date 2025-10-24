@@ -1,3 +1,68 @@
+/* CSS Variables for Theme System */
+:root {
+    /* Dark Theme (Default) */
+    --bg-primary: #0f0f23;
+    --bg-secondary: #1a1a3e;
+    --bg-tertiary: #2d1b4e;
+    --bg-card: rgba(0, 0, 0, 0.4);
+    --bg-card-hover: rgba(0, 0, 0, 0.6);
+    --bg-modal: rgba(0, 0, 0, 0.9);
+    --bg-input: rgba(30, 30, 30, 0.8);
+    --bg-button: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    --bg-button-hover: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    --bg-button-secondary: rgba(139, 92, 246, 0.2);
+    --bg-button-secondary-hover: rgba(139, 92, 246, 0.3);
+    
+    --text-primary: #e8e8e8;
+    --text-secondary: #b8b8b8;
+    --text-muted: #888;
+    --text-accent: #a78bfa;
+    --text-button: #ffffff;
+    
+    --border-primary: rgba(139, 92, 246, 0.3);
+    --border-secondary: rgba(139, 92, 246, 0.2);
+    --border-accent: #8b5cf6;
+    
+    --shadow-primary: 0 8px 25px rgba(139, 92, 246, 0.2);
+    --shadow-secondary: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
+    --accent-primary: #8b5cf6;
+    --accent-secondary: #a78bfa;
+    --accent-glow: rgba(139, 92, 246, 0.3);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f1f5f9;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-hover: rgba(255, 255, 255, 1);
+    --bg-modal: rgba(255, 255, 255, 0.95);
+    --bg-input: rgba(248, 250, 252, 0.8);
+    --bg-button: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    --bg-button-hover: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    --bg-button-secondary: rgba(139, 92, 246, 0.1);
+    --bg-button-secondary-hover: rgba(139, 92, 246, 0.2);
+    
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-accent: #8b5cf6;
+    --text-button: #ffffff;
+    
+    --border-primary: rgba(139, 92, 246, 0.3);
+    --border-secondary: rgba(139, 92, 246, 0.2);
+    --border-accent: #8b5cf6;
+    
+    --shadow-primary: 0 8px 25px rgba(139, 92, 246, 0.15);
+    --shadow-secondary: 0 4px 15px rgba(0, 0, 0, 0.1);
+    
+    --accent-primary: #8b5cf6;
+    --accent-secondary: #a78bfa;
+    --accent-glow: rgba(139, 92, 246, 0.2);
+}
+
 /* D&D DM Toolkit Shared Styles */
 * {
     margin: 0;
@@ -7,9 +72,10 @@
 
 body {
     font-family: 'Crimson Text', serif;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b4e 100%);
-    color: #e8e8e8;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+    color: var(--text-primary);
     min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Scrollbar Styling */
@@ -51,23 +117,69 @@ body {
 
 /* Navigation */
 .navbar {
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid rgba(99, 102, 241, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    border-bottom: 2px solid var(--border-primary);
+    box-shadow: var(--shadow-secondary);
     flex-wrap: wrap;
     position: sticky;
     top: 0;
     z-index: 1000;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-brand h1 {
+    color: var(--text-accent);
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-shadow: 0 0 10px var(--accent-glow);
+    transition: color 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-button-secondary-hover);
+    border-color: var(--border-accent);
+    transform: scale(1.05);
+}
+
+.theme-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+    transform: rotate(20deg);
 }
 
 .nav-brand h1 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
     font-size: 1.8rem;
     margin: 0;
@@ -80,9 +192,9 @@ body {
 }
 
 .nav-dropdown-toggle {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border: 2px solid rgba(139, 92, 246, 0.5);
-    color: #fff;
+    background: var(--bg-button);
+    border: 2px solid var(--border-primary);
+    color: var(--text-button);
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
@@ -92,13 +204,13 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    box-shadow: var(--shadow-primary);
 }
 
 .nav-dropdown-toggle:hover {
-    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    background: var(--bg-button-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: var(--shadow-primary);
 }
 
 .nav-dropdown-toggle:active {
@@ -119,12 +231,12 @@ body {
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 0;
-    background: rgba(15, 15, 35, 0.98);
+    background: var(--bg-modal);
     backdrop-filter: blur(20px);
-    border: 2px solid rgba(139, 92, 246, 0.5);
+    border: 2px solid var(--border-primary);
     border-radius: 12px;
     min-width: 220px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 20px rgba(139, 92, 246, 0.3);
+    box-shadow: var(--shadow-secondary);
     z-index: 1000;
     overflow: hidden;
     animation: dropdownSlide 0.3s ease;
@@ -149,8 +261,8 @@ body {
     display: block;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-    color: #e8e8e8;
+    border-bottom: 1px solid var(--border-secondary);
+    color: var(--text-primary);
     padding: 1rem 1.5rem;
     border-radius: 0;
     text-decoration: none;
@@ -165,26 +277,26 @@ body {
 }
 
 .nav-dropdown-menu .nav-link:hover {
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     transform: translateX(5px);
     box-shadow: none;
-    color: #a78bfa;
+    color: var(--text-accent);
 }
 
 .nav-dropdown-menu .nav-link:active {
-    background: rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary-hover);
 }
 
 .nav-dropdown-menu .nav-link.active {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: #fff;
+    background: var(--bg-button);
+    color: var(--text-button);
     font-weight: 600;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .nav-dropdown-menu .nav-link.active:hover {
-    background: linear-gradient(135deg, #7c3aed, #a78bfa);
-    color: #fff;
+    background: var(--bg-button-hover);
+    color: var(--text-button);
 }
 
 /* Campaign Selector */
@@ -198,7 +310,7 @@ body {
 .campaign-selector {
     background: rgba(99, 102, 241, 0.1);
     border: 2px solid rgba(99, 102, 241, 0.4);
-    color: #e8e8e8;
+    color: var(--text-primary);
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-family: 'Crimson Text', serif;
@@ -222,7 +334,7 @@ body {
 
 .campaign-selector option {
     background: #1a1a3e;
-    color: #e8e8e8;
+    color: var(--text-primary);
     padding: 0.5rem;
 }
 
@@ -254,13 +366,13 @@ body {
     align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
     flex-wrap: wrap;
 }
 
 .page-header h2 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 2rem;
     margin: 0;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -292,7 +404,7 @@ body {
 
 .btn-secondary {
     background: transparent;
-    color: #e8e8e8;
+    color: var(--text-primary);
     border: 2px solid rgba(99, 102, 241, 0.5);
     padding: 0.5rem 1rem;
     border-radius: 8px;
@@ -308,7 +420,7 @@ body {
 .btn-secondary:hover {
     background: rgba(99, 102, 241, 0.2);
     border-color: #6366f1;
-    color: #e8e8e8;
+    color: var(--text-primary);
     text-decoration: none;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
@@ -366,7 +478,7 @@ body {
 
 .btn-secondary {
     background: transparent;
-    color: #e8e8e8;
+    color: var(--text-primary);
     border: 2px solid rgba(99, 102, 241, 0.5);
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
@@ -381,7 +493,7 @@ body {
 .btn-secondary:hover {
     background: rgba(99, 102, 241, 0.2);
     border-color: #6366f1;
-    color: #e8e8e8;
+    color: var(--text-primary);
     text-decoration: none;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
@@ -392,7 +504,7 @@ body {
     justify-content: flex-end;
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 /* Content Lists */
@@ -403,9 +515,9 @@ body {
 }
 
 .content-item {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -420,7 +532,7 @@ body {
 
 .content-item h3 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
 }
@@ -442,7 +554,7 @@ body {
     margin-top: 2rem;
     margin-bottom: 1rem;
     padding: 0.75rem 1rem;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-left: 4px solid #8b5cf6;
     border-radius: 8px;
     width: 100%;
@@ -451,7 +563,7 @@ body {
 
 .spell-level-header h3 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 1.5rem;
     margin: 0;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
@@ -502,14 +614,14 @@ body {
 /* Tag System */
 .tag {
     display: inline-block;
-    background: rgba(139, 92, 246, 0.2);
-    color: #a78bfa;
+    background: var(--bg-button-secondary);
+    color: var(--text-accent);
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
     margin: 0.25rem 0.25rem 0.25rem 0;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     text-transform: lowercase;
 }
 
@@ -522,15 +634,15 @@ body {
 
 /* Tag Filters */
 .tag-filters {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-secondary);
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 2rem;
 }
 
 .filter-section label {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-family: 'Cinzel', serif;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -546,9 +658,9 @@ body {
 }
 
 .tag-filter-btn {
-    background: rgba(139, 92, 246, 0.2);
-    color: #a78bfa;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    color: var(--text-accent);
+    border: 1px solid var(--border-primary);
     padding: 0.5rem 1rem;
     border-radius: 20px;
     cursor: pointer;
@@ -581,7 +693,7 @@ body {
 .generator-options {
     margin: 1.5rem 0;
     background: rgba(139, 92, 246, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
     border-radius: 12px;
     padding: 1.5rem;
 }
@@ -618,8 +730,8 @@ body {
 }
 
 .generator-options label:hover {
-    background: rgba(139, 92, 246, 0.1);
-    color: #a78bfa;
+    background: var(--bg-button-secondary);
+    color: var(--text-accent);
 }
 
 .generator-options input[type="checkbox"] {
@@ -636,15 +748,15 @@ body {
 }
 
 .generated-enemy-card {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
     border-radius: 12px;
     padding: 1.5rem;
     margin-top: 1rem;
 }
 
 .generated-enemy-card h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-family: 'Cinzel', serif;
     margin-bottom: 1rem;
     text-align: center;
@@ -670,7 +782,7 @@ body {
 }
 
 .stat-row strong {
-    color: #a78bfa;
+    color: var(--text-accent);
 }
 
 /* Data Management */
@@ -687,9 +799,9 @@ body {
     gap: 0.5rem;
     padding: 1.5rem 1rem;
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     border-radius: 12px;
-    color: #a78bfa;
+    color: var(--text-accent);
     text-decoration: none;
     transition: all 0.3s ease;
     font-weight: 500;
@@ -700,7 +812,7 @@ body {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.1));
     border-color: rgba(139, 92, 246, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+    box-shadow: var(--shadow-primary);
 }
 
 .data-management .action-btn span:first-child {
@@ -710,7 +822,7 @@ body {
 
 /* Encounter-specific styles */
 .participant-selection {
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -727,9 +839,9 @@ body {
     align-items: center;
     padding: 0.5rem;
     margin: 0.25rem 0;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-radius: 6px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
 }
 
 .participant-item span {
@@ -752,13 +864,13 @@ body {
 .session-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .session-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -771,11 +883,11 @@ body {
 }
 
 .meta-item {
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     padding: 0.25rem 0.75rem;
     border-radius: 15px;
     font-size: 0.9rem;
-    color: #e8e8e8;
+    color: var(--text-primary);
     border: 1px solid rgba(139, 92, 246, 0.4);
 }
 
@@ -784,7 +896,7 @@ body {
 .session-encounters {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
@@ -793,14 +905,14 @@ body {
 .session-notes h4,
 .session-encounters h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
 
 .session-description p,
 .notes-content {
-    color: #e8e8e8;
+    color: var(--text-primary);
     line-height: 1.6;
     margin: 0;
 }
@@ -816,22 +928,22 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     min-width: 100px;
 }
 
 .stat-label {
     font-size: 0.9rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.25rem;
 }
 
 .stat-value {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #e8e8e8;
+    color: var(--text-primary);
 }
 
 .encounters-list {
@@ -845,18 +957,18 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0.75rem;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-radius: 6px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
 }
 
 .encounter-name {
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: 500;
 }
 
 .encounter-type {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 0.9rem;
     background: rgba(167, 139, 250, 0.2);
     padding: 0.25rem 0.5rem;
@@ -869,7 +981,7 @@ body {
     justify-content: center;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 .session-actions .btn {
@@ -906,13 +1018,13 @@ body {
 .npc-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .npc-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -938,14 +1050,14 @@ body {
 .npc-abilities {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .npc-abilities h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 1rem 0;
     font-size: 1.1rem;
 }
@@ -961,40 +1073,40 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 0.5rem;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-radius: 6px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
 }
 
 .ability-label {
     font-size: 0.8rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.25rem;
 }
 
 .ability-value {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #e8e8e8;
+    color: var(--text-primary);
 }
 
 .npc-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .npc-section h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
 
 .section-content {
-    color: #e8e8e8;
+    color: var(--text-primary);
     line-height: 1.6;
     margin: 0;
 }
@@ -1005,7 +1117,7 @@ body {
     justify-content: center;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 .npc-actions .btn {
@@ -1030,13 +1142,13 @@ body {
 .item-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .item-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -1100,14 +1212,14 @@ body {
 .item-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .item-section h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
@@ -1118,7 +1230,7 @@ body {
     justify-content: center;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 .item-actions .btn {
@@ -1143,13 +1255,13 @@ body {
 .enemy-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .enemy-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -1265,14 +1377,14 @@ body {
 .enemy-abilities {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .enemy-abilities h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 1rem 0;
     font-size: 1.1rem;
 }
@@ -1280,14 +1392,14 @@ body {
 .enemy-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .enemy-section h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
@@ -1298,7 +1410,7 @@ body {
     justify-content: center;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 .enemy-actions .btn {
@@ -1323,13 +1435,13 @@ body {
 .spell-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .spell-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -1441,14 +1553,14 @@ body {
 .spell-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .spell-section h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
@@ -1461,34 +1573,34 @@ body {
 .note-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .note-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
 }
 
 .note-meta .meta-item.created {
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-color: rgba(139, 92, 246, 0.4);
 }
 
 .note-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .note-section h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
@@ -1499,7 +1611,7 @@ body {
     justify-content: center;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 .note-actions .btn {
@@ -1524,13 +1636,13 @@ body {
 .encounter-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .encounter-title {
     font-family: 'Cinzel', serif;
     font-size: 2rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
@@ -1589,14 +1701,14 @@ body {
 .encounter-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
     border-left: 4px solid #8b5cf6;
 }
 
 .encounter-section h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
 }
@@ -1612,18 +1724,18 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0.75rem;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     border-radius: 6px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
 }
 
 .participant-name {
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: 500;
 }
 
 .participant-type {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 0.9rem;
     background: rgba(167, 139, 250, 0.2);
     padding: 0.25rem 0.5rem;
@@ -1636,7 +1748,7 @@ body {
     justify-content: center;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.3);
+    border-top: 1px solid var(--border-primary);
 }
 
 .encounter-actions .btn {
@@ -1678,7 +1790,7 @@ body {
 }
 
 .filter-header label {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: bold;
     font-size: 0.9rem;
     font-family: 'Cinzel', serif;
@@ -1688,9 +1800,9 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 12px;
     padding: 1rem;
 }
@@ -1699,7 +1811,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-size: 0.85rem;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
@@ -1718,9 +1830,9 @@ body {
 }
 
 .spell-item {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 12px;
     padding: 1rem 1.5rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -1737,14 +1849,14 @@ body {
 
 .spell-item h3 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.25rem;
     font-size: 1.2rem;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
 }
 
 .spell-item p {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin: 0;
 }
@@ -1752,10 +1864,10 @@ body {
 /* Spell Details Modal */
 .spell-details h2 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1.5rem;
     text-align: center;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
     padding-bottom: 0.5rem;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
 }
@@ -1768,29 +1880,29 @@ body {
 }
 
 .spell-info-item {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     padding: 0.75rem;
 }
 
 .spell-info-item strong {
-    color: #a78bfa;
+    color: var(--text-accent);
     display: block;
     margin-bottom: 0.25rem;
     font-size: 0.9rem;
 }
 
 .spell-classes {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     padding: 0.75rem;
     margin-bottom: 1.5rem;
 }
 
 .spell-classes strong {
-    color: #a78bfa;
+    color: var(--text-accent);
 }
 
 .spell-description {
@@ -1799,7 +1911,7 @@ body {
 
 .spell-description h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
 }
@@ -1810,15 +1922,15 @@ body {
 }
 
 .spell-upgrade {
-    background: rgba(139, 92, 246, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     padding: 1rem;
 }
 
 .spell-upgrade h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
 }
@@ -1832,14 +1944,12 @@ body {
 }
 
 .dashboard-card {
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--bg-card);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
     border-radius: 16px;
     padding: 2rem;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(139, 92, 246, 0.1);
+    box-shadow: var(--shadow-secondary);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -1866,7 +1976,7 @@ body {
 
 .dashboard-card h3 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1.5rem;
     font-size: 1.4rem;
     text-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
@@ -1935,7 +2045,7 @@ body {
 
 .stat-card {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     border-radius: 16px;
     padding: 2rem 1.5rem;
     text-align: center;
@@ -1970,7 +2080,7 @@ body {
 .stat-number {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #a78bfa;
+    color: var(--text-accent);
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
     margin-bottom: 0.75rem;
     font-family: 'Cinzel', serif;
@@ -1979,7 +2089,7 @@ body {
 
 .stat-label {
     font-size: 1rem;
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -2037,7 +2147,7 @@ body {
 
 .player-stat-item {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     border-radius: 12px;
     padding: 1.25rem 1rem;
     text-align: center;
@@ -2072,13 +2182,13 @@ body {
 .player-stat-number {
     font-size: 1.75rem;
     font-weight: bold;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.25rem;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
 }
 
 .player-stat-label {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -2086,7 +2196,7 @@ body {
 
 .player-details {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(139, 92, 246, 0.05));
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
     border-radius: 12px;
     padding: 1.25rem;
     margin-top: 1rem;
@@ -2094,7 +2204,7 @@ body {
 
 .player-classes,
 .player-races {
-    color: #e8e8e8;
+    color: var(--text-primary);
     margin-bottom: 0.75rem;
     font-size: 0.9rem;
     line-height: 1.4;
@@ -2107,7 +2217,7 @@ body {
 
 .player-classes strong,
 .player-races strong {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-right: 0.5rem;
     font-weight: 600;
 }
@@ -2116,7 +2226,7 @@ body {
 .dashboard-empty {
     text-align: center;
     padding: 2rem;
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-style: italic;
 }
 
@@ -2136,8 +2246,8 @@ body {
 }
 
 .recent-item {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-secondary);
     border-radius: 8px;
     padding: 1rem;
     transition: all 0.3s ease;
@@ -2149,13 +2259,13 @@ body {
 }
 
 .recent-item-title {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
     margin-bottom: 0.25rem;
 }
 
 .recent-item-meta {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.85rem;
 }
 
@@ -2176,15 +2286,15 @@ body {
 /* Quick Dice Section */
 .quick-dice-section {
     grid-area: quick;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
 }
 
 .quick-dice-section h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1rem;
     text-align: center;
     font-family: 'Cinzel', serif;
@@ -2202,7 +2312,7 @@ body {
     border: 2px solid rgba(139, 92, 246, 0.4);
     border-radius: 12px;
     padding: 1rem;
-    color: #e8e8e8;
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -2245,15 +2355,15 @@ body {
 /* Advanced Dice Section */
 .advanced-dice-section {
     grid-area: advanced;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
 }
 
 .advanced-dice-section h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1rem;
     text-align: center;
     font-family: 'Cinzel', serif;
@@ -2274,7 +2384,7 @@ body {
 }
 
 .control-group label {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -2283,9 +2393,9 @@ body {
 
 .control-group input,
 .control-group select {
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    color: #e8e8e8;
+    background: var(--bg-card);
+    border: 2px solid var(--border-primary);
+    color: var(--text-primary);
     padding: 0.75rem;
     border-radius: 8px;
     font-size: 1rem;
@@ -2320,9 +2430,9 @@ body {
 /* Results Display */
 .dice-results {
     grid-area: results;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -2336,7 +2446,7 @@ body {
 }
 
 .results-placeholder {
-    color: #a78bfa;
+    color: var(--text-accent);
     opacity: 0.7;
 }
 
@@ -2348,7 +2458,7 @@ body {
 
 .dice-result {
     width: 100%;
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-family: 'Cinzel', serif;
 }
 
@@ -2364,7 +2474,7 @@ body {
 
 .roll-description {
     font-size: 1.1rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-weight: 600;
 }
@@ -2427,16 +2537,16 @@ body {
 /* Statistics Section */
 .dice-statistics {
     grid-area: stats;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
     margin-bottom: 2rem;
 }
 
 .dice-statistics h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1rem;
     text-align: center;
     font-family: 'Cinzel', serif;
@@ -2452,9 +2562,9 @@ body {
 .stat-item {
     text-align: center;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 12px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
 }
 
 .stat-number {
@@ -2469,7 +2579,7 @@ body {
 .stat-label {
     display: block;
     font-size: 0.9rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 0.5rem;
@@ -2478,9 +2588,9 @@ body {
 /* History Section */
 .dice-history {
     grid-area: history;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
     max-height: 400px;
@@ -2497,7 +2607,7 @@ body {
 }
 
 .history-header h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0;
     font-family: 'Cinzel', serif;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
@@ -2510,7 +2620,7 @@ body {
 
 .no-history {
     text-align: center;
-    color: #a78bfa;
+    color: var(--text-accent);
     opacity: 0.7;
     font-style: italic;
 }
@@ -2525,7 +2635,7 @@ body {
 }
 
 .dice-history-item:hover {
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
 }
 
@@ -2551,7 +2661,7 @@ body {
 }
 
 .history-main .result {
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: bold;
 }
 
@@ -2562,7 +2672,7 @@ body {
 }
 
 .history-main .description {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-style: italic;
 }
 
@@ -2630,9 +2740,9 @@ body {
 
 /* Session Cards */
 .session-card {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
     cursor: pointer;
@@ -2654,8 +2764,8 @@ body {
 
 .session-card:hover {
     transform: translateY(-4px);
-    border-color: #8b5cf6;
-    box-shadow: 0 12px 30px rgba(139, 92, 246, 0.2);
+    border-color: var(--text-accent);
+    box-shadow: var(--shadow-primary);
 }
 
 /* Session Sections */
@@ -2698,7 +2808,7 @@ body {
 /* Session Status Styles */
 .session-card.session-today {
     border-color: rgba(245, 158, 11, 0.4);
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(0, 0, 0, 0.4));
+    background: var(--bg-card);
 }
 
 .session-card.session-today::before {
@@ -2723,7 +2833,7 @@ body {
 
 .session-card.session-completed {
     border-color: rgba(16, 185, 129, 0.4);
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 0, 0, 0.4));
+    background: var(--bg-card);
 }
 
 .session-card.session-completed::before {
@@ -2752,7 +2862,7 @@ body {
 }
 
 .status-text {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -2760,8 +2870,8 @@ body {
 }
 
 .session-number {
-    background: rgba(139, 92, 246, 0.2);
-    color: #a78bfa;
+    background: var(--bg-button-secondary);
+    color: var(--text-accent);
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.8rem;
@@ -2774,7 +2884,7 @@ body {
 
 .chapter-badge {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(167, 139, 250, 0.1));
-    color: #a78bfa;
+    color: var(--text-accent);
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.8rem;
@@ -2784,7 +2894,7 @@ body {
 }
 
 .session-title h3 {
-    color: #e8e8e8;
+    color: var(--text-primary);
     margin: 0;
     font-family: 'Cinzel', serif;
     font-size: 1.4rem;
@@ -2802,7 +2912,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -2830,9 +2940,9 @@ body {
 
 /* Encounter Cards */
 .encounter-card {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
     cursor: pointer;
@@ -2897,7 +3007,7 @@ body {
 }
 
 .type-text {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -2934,7 +3044,7 @@ body {
 }
 
 .encounter-title h3 {
-    color: #e8e8e8;
+    color: var(--text-primary);
     margin: 0 0 1rem 0;
     font-family: 'Cinzel', serif;
     font-size: 1.4rem;
@@ -2952,7 +3062,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -2978,11 +3088,11 @@ body {
     grid-column: 1 / -1;
     margin: 2rem 0 1rem 0;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .encounter-session-header h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0;
     font-family: 'Cinzel', serif;
     font-size: 1.5rem;
@@ -3002,8 +3112,8 @@ body {
 }
 
 .modal-session-header, .modal-encounter-header {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(167, 139, 250, 0.05));
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-card);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -3027,8 +3137,8 @@ body {
 }
 
 .modal-chapter-badge, .modal-encounter-type-badge {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(167, 139, 250, 0.1));
-    color: #a78bfa;
+    background: var(--bg-button-secondary);
+    color: var(--text-accent);
     padding: 0.5rem 1rem;
     border-radius: 12px;
     font-size: 0.9rem;
@@ -3040,7 +3150,7 @@ body {
 }
 
 .modal-session-title, .modal-encounter-title {
-    color: #e8e8e8;
+    color: var(--text-primary);
     margin: 0 0 0.5rem 0;
     font-family: 'Cinzel', serif;
     font-size: 2rem;
@@ -3049,7 +3159,7 @@ body {
 }
 
 .modal-session-number, .modal-encounter-session {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 1.1rem;
     font-weight: 600;
 }
@@ -3064,7 +3174,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 1rem;
 }
 
@@ -3130,27 +3240,27 @@ body {
 }
 
 .modal-content-card {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.2);
+    border: 2px solid var(--border-secondary);
     border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .modal-content-card:hover {
-    border-color: rgba(139, 92, 246, 0.4);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.1);
+    border-color: var(--border-primary);
+    box-shadow: var(--shadow-primary);
 }
 
 .modal-card-header {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(167, 139, 250, 0.05));
+    background: var(--bg-button-secondary);
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid var(--border-secondary);
 }
 
 .modal-card-title {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0;
     font-family: 'Cinzel', serif;
     font-size: 1.3rem;
@@ -3169,14 +3279,14 @@ body {
 }
 
 .modal-description {
-    color: #e8e8e8;
+    color: var(--text-primary);
     line-height: 1.6;
     margin: 0;
     font-size: 1rem;
 }
 
 .modal-notes {
-    color: #c7c7c7;
+    color: var(--text-secondary);
     line-height: 1.6;
     font-size: 0.95rem;
 }
@@ -3189,16 +3299,16 @@ body {
 }
 
 .modal-encounter-item {
-    background: rgba(139, 92, 246, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-secondary);
     border-radius: 8px;
     padding: 1rem;
     transition: all 0.3s ease;
 }
 
 .modal-encounter-item:hover {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.4);
+    background: var(--bg-button-secondary-hover);
+    border-color: var(--border-primary);
 }
 
 .modal-encounter-header {
@@ -3219,7 +3329,7 @@ body {
 }
 
 .type-text {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -3236,7 +3346,7 @@ body {
 }
 
 .modal-encounter-name {
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
@@ -3247,13 +3357,13 @@ body {
 
 
 .modal-encounter-meta {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
 }
 
 .modal-encounter-description {
-    color: #c7c7c7;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     line-height: 1.5;
 }
@@ -3269,16 +3379,16 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: rgba(139, 92, 246, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-secondary);
     border-radius: 8px;
     padding: 0.75rem;
     transition: all 0.3s ease;
 }
 
 .modal-participant-item:hover {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.4);
+    background: var(--bg-button-secondary-hover);
+    border-color: var(--border-primary);
 }
 
 .participant-type-badge {
@@ -3308,7 +3418,7 @@ body {
 }
 
 .participant-name {
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 1rem;
     margin-bottom: 0.25rem;
@@ -3318,7 +3428,7 @@ body {
 
 
 .participant-type {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -3331,7 +3441,7 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    border-top: 1px solid var(--border-secondary);
 }
 
 .modal-session-actions .btn, .modal-encounter-actions .btn {
@@ -3438,9 +3548,9 @@ body {
 }
 
 .initiative-item {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     border-radius: 12px;
     padding: 1rem;
     display: flex;
@@ -3460,7 +3570,7 @@ body {
 
 .initiative-item h4 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0;
 }
 
@@ -3473,7 +3583,7 @@ body {
 }
 
 .initiative-type {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin: 0;
     text-transform: uppercase;
@@ -3511,9 +3621,9 @@ body {
 .initiative-number {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #a78bfa;
-    background: rgba(139, 92, 246, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: var(--text-accent);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
     border-radius: 6px;
     padding: 0.25rem 0.75rem;
     margin-left: 0.5rem;
@@ -3538,13 +3648,13 @@ body {
     padding: 0.75rem;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
 }
 
 .death-save-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -3565,7 +3675,7 @@ body {
 
 .death-save-label-small {
     font-size: 0.8rem;
-    color: #b8b8b8;
+    color: var(--text-secondary);
     min-width: 60px;
 }
 
@@ -3578,7 +3688,7 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     transition: all 0.2s ease;
 }
 
@@ -3645,9 +3755,9 @@ body {
 }
 
 .btn-death-save.btn-reset {
-    background: rgba(139, 92, 246, 0.2);
-    color: #a78bfa;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    color: var(--text-accent);
+    border: 1px solid var(--border-primary);
 }
 
 .btn-death-save.btn-reset:hover {
@@ -3675,8 +3785,8 @@ body {
 }
 
 .modal {
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b4e 100%);
-    border: 3px solid rgba(139, 92, 246, 0.5);
+    background: var(--bg-modal);
+    border: 3px solid var(--border-primary);
     border-radius: 16px;
     max-width: 800px;
     width: 90%;
@@ -3685,7 +3795,7 @@ body {
     z-index: 1001;
     pointer-events: auto;
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    box-shadow: var(--shadow-secondary);
 }
 
 .modal-header {
@@ -3693,12 +3803,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .modal-header h3 {
     font-family: 'Cinzel', serif;
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
 }
@@ -3706,7 +3816,7 @@ body {
 .modal-close {
     background: none;
     border: none;
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-size: 2rem;
     cursor: pointer;
     padding: 0;
@@ -3718,7 +3828,7 @@ body {
 }
 
 .modal-close:hover {
-    color: #a78bfa;
+    color: var(--text-accent);
 }
 
 .modal-content {
@@ -3736,7 +3846,7 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 0.75rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-family: 'Cinzel', serif;
     font-size: 1rem;
     text-transform: uppercase;
@@ -3748,9 +3858,9 @@ body {
 .form-group textarea,
 .form-group select {
     width: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    color: #e8e8e8;
+    background: var(--bg-input);
+    border: 2px solid var(--border-primary);
+    color: var(--text-primary);
     padding: 1rem;
     border-radius: 12px;
     font-family: 'Crimson Text', serif;
@@ -3767,8 +3877,8 @@ body {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #a78bfa;
-    box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
+    border-color: var(--text-accent);
+    box-shadow: var(--shadow-primary);
     transform: translateY(-1px);
 }
 
@@ -3786,27 +3896,27 @@ body {
 
 .form-section {
     background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
     border-radius: 16px;
     padding: 1.5rem;
     margin-bottom: 2rem;
 }
 
 .form-section h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-family: 'Cinzel', serif;
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
     text-align: center;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    border-bottom: 2px solid var(--border-primary);
     padding-bottom: 0.75rem;
 }
 
 /* Search */
 .search-input {
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    color: #e8e8e8;
+    background: var(--bg-card);
+    border: 2px solid var(--border-primary);
+    color: var(--text-primary);
     padding: 0.75rem;
     border-radius: 8px;
     font-family: 'Crimson Text', serif;
@@ -3830,7 +3940,7 @@ body {
     padding: 0.2rem 0.4rem;
     border-radius: 3px;
     font-family: monospace;
-    color: #a78bfa;
+    color: var(--text-accent);
 }
 
 .file-actions {
@@ -3849,8 +3959,8 @@ body {
 }
 
 .character-card {
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-card);
+    border: 2px solid var(--border-primary);
     border-radius: 16px;
     padding: 1.5rem;
     transition: all 0.3s ease;
@@ -3890,7 +4000,7 @@ body {
     height: 60px;
     border-radius: 50%;
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(167, 139, 250, 0.1));
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid var(--border-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3940,7 +4050,7 @@ body {
     padding: 1rem;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 12px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
 }
 
 .skill-checkbox {
@@ -3970,16 +4080,16 @@ body {
 
 .skill-name {
     font-size: 0.95rem;
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-weight: 500;
     flex: 1;
 }
 
 .skill-ability {
     font-size: 0.8rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
-    background: rgba(139, 92, 246, 0.2);
+    background: var(--bg-button-secondary);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
 }
@@ -3993,9 +4103,9 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
     padding: 0.75rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 8px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
 }
 
 .ability-score {
@@ -4010,7 +4120,7 @@ body {
 
 .ability-name {
     font-size: 0.8rem;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-weight: 600;
     margin-bottom: 0.25rem;
 }
@@ -4018,7 +4128,7 @@ body {
 .ability-value {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #e8e8e8;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
 }
 
@@ -4033,7 +4143,7 @@ body {
 }
 
 .character-skills h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 1rem;
     margin-bottom: 0.5rem;
     font-family: 'Cinzel', serif;
@@ -4060,7 +4170,7 @@ body {
 }
 
 .character-status h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 1rem;
     margin-bottom: 0.5rem;
     font-family: 'Cinzel', serif;
@@ -4082,7 +4192,7 @@ body {
 }
 
 .character-info h3 {
-    color: #e8e8e8;
+    color: var(--text-primary);
     margin: 0 0 0.25rem 0;
     font-family: 'Cinzel', serif;
     font-size: 1.4rem;
@@ -4090,14 +4200,14 @@ body {
 }
 
 .character-subtitle {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.25rem 0;
     font-weight: 600;
     font-size: 0.95rem;
 }
 
 .character-race {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     margin: 0;
     font-size: 0.9rem;
     font-style: italic;
@@ -4128,9 +4238,9 @@ body {
     gap: 1rem;
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 12px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
 }
 
 .stat-item {
@@ -4140,7 +4250,7 @@ body {
 
 .stat-label {
     display: block;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -4150,7 +4260,7 @@ body {
 
 .stat-value {
     display: block;
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-size: 1.2rem;
     font-weight: bold;
     font-family: 'Cinzel', serif;
@@ -4178,7 +4288,7 @@ body {
 }
 
 .character-notes h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.75rem 0;
     font-family: 'Cinzel', serif;
     font-size: 1rem;
@@ -4210,7 +4320,7 @@ body {
 }
 
 .note-item p {
-    color: #e8e8e8;
+    color: var(--text-primary);
     font-size: 0.85rem;
     line-height: 1.4;
     margin: 0;
@@ -4266,7 +4376,7 @@ body {
 .dnd-beyond-import .import-section {
     padding: 1.5rem;
     background: rgba(139, 92, 246, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid var(--border-secondary);
     border-radius: 12px;
     margin-bottom: 1rem;
 }
@@ -4276,13 +4386,13 @@ body {
 }
 
 .dnd-beyond-import h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0 0 0.75rem 0;
     font-family: 'Cinzel', serif;
 }
 
 .dnd-beyond-import p {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     margin-bottom: 1rem;
 }
 
@@ -4320,7 +4430,7 @@ body {
         justify-content: space-between;
         align-items: center;
         padding: 0.75rem;
-        background: rgba(139, 92, 246, 0.1);
+        background: var(--bg-button-secondary);
         border-radius: 8px;
     }
     
@@ -4338,7 +4448,7 @@ body {
 }
 
 .campaign-card {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
     border: 2px solid rgba(99, 102, 241, 0.3);
     border-radius: 12px;
     padding: 1.5rem;
@@ -4356,7 +4466,7 @@ body {
 
 .campaign-card.active {
     border-color: #8b5cf6;
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
@@ -4368,7 +4478,7 @@ body {
 }
 
 .campaign-header h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin: 0;
     font-size: 1.5rem;
 }
@@ -4383,7 +4493,7 @@ body {
 }
 
 .campaign-description {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     margin-bottom: 1rem;
     min-height: 3rem;
 }
@@ -4472,12 +4582,12 @@ body {
 }
 
 .empty-state h3 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1rem;
 }
 
 .empty-state p {
-    color: #b8b8b8;
+    color: var(--text-secondary);
     margin-bottom: 2rem;
 }
 
@@ -4490,7 +4600,7 @@ body {
 }
 
 .import-section h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 1rem;
 }
 
@@ -4505,7 +4615,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #e8e8e8;
+    color: var(--text-primary);
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -4760,7 +4870,7 @@ body {
 }
 
 .character-saving-throws h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-family: 'Cinzel', serif;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
@@ -4773,13 +4883,13 @@ body {
 }
 
 .saving-throw-badge {
-    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    background: var(--bg-button);
     color: #fff;
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.9rem;
     font-weight: 600;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
 }
 
@@ -4791,7 +4901,7 @@ body {
 }
 
 .character-skills h4 {
-    color: #a78bfa;
+    color: var(--text-accent);
     margin-bottom: 0.5rem;
     font-family: 'Cinzel', serif;
     text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
@@ -4842,9 +4952,9 @@ body {
 }
 
 .popup-btn {
-    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    background: var(--bg-button);
     color: #fff;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid var(--border-primary);
     border-radius: 6px;
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
@@ -4874,7 +4984,7 @@ body {
 
 /* Character Notes Counter Styling */
 .notes-counter {
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--bg-button-secondary);
     border-radius: 6px;
     padding: 0.75rem;
     border-left: 3px solid #8b5cf6;
@@ -4883,14 +4993,14 @@ body {
 .notes-count {
     display: block;
     font-weight: 600;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 1rem;
     margin-bottom: 0.5rem;
 }
 
 .notes-preview {
     display: block;
-    color: #b8b8b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     line-height: 1.4;
     font-style: italic;
@@ -4898,8 +5008,8 @@ body {
 
 /* Info Box Styling */
 .info-box {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--bg-button-secondary);
+    border: 1px solid var(--border-primary);
     border-radius: 6px;
     padding: 1rem;
     margin-top: 0.5rem;
@@ -4907,7 +5017,7 @@ body {
 
 .info-box p {
     margin: 0;
-    color: #a78bfa;
+    color: var(--text-accent);
     font-size: 0.9rem;
     line-height: 1.4;
 }

@@ -1,5 +1,15 @@
 // D&D DM Toolkit Shared JavaScript
 
+// Open board window function
+function openBoardWindow() {
+    if (window.electron && window.electron.openBoardWindow) {
+        window.electron.openBoardWindow();
+    } else {
+        // Fallback for web version
+        window.open('/board', '_blank', 'width=1200,height=900,resizable=yes,scrollbars=yes');
+    }
+}
+
 // Global state
 let currentData = {
     npcs: [],

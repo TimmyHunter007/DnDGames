@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Board - D&D DM Toolkit</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="/js/theme.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b4e 100%);
+            min-height: 100vh;
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .board-window-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .board-window-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+            padding-bottom: 1rem;
+        }
+        
+        .board-window-header h1 {
+            font-family: 'Cinzel', serif;
+            color: #a78bfa;
+            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        
+        .board-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .board-size-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .board-size-controls label {
+            color: #a78bfa;
+            font-weight: bold;
+        }
+        
+        .board-size-controls input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 6px;
+            color: #fff;
+            padding: 0.5rem;
+            width: 80px;
+        }
+        
+        .board-size-controls button {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .board-size-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+        
+        .token-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .token-controls select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 6px;
+            color: #fff;
+            padding: 0.5rem;
+            min-width: 150px;
+        }
+        
+        .token-controls button {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .token-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        .board-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .board-grid {
+            display: grid;
+            gap: 2px;
+            background: #2a2a2a;
+            border: 3px solid #8b5cf6;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .board-cell {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            min-width: 40px;
+        }
+        
+        .board-cell:hover {
+            background: #2a2a2a;
+            border-color: #8b5cf6;
+        }
+        
+        .board-cell.occupied {
+            background: #3a3a3a;
+        }
+        
+        .token {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: move;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease;
+            z-index: 10;
+            overflow: hidden;
+        }
+        
+        .token-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .token-initials {
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .token:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            z-index: 20;
+        }
+        
+        .token.player {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        
+        .token.npc {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .token.enemy {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .token.monster {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+        
+        .token.numbered {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .token-info {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 30;
+        }
+        
+        .token:hover .token-info {
+            opacity: 1;
+        }
+        
+        .board-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e8e8e8;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        
+        .legend-color.player {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+        
+        .legend-color.npc {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .legend-color.enemy {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .legend-color.monster {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
+        .legend-color.numbered {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .board-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .board-actions button {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .board-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+        }
+        
+        .board-actions button.clear {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .board-actions button.clear:hover {
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .board-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .board-size-controls,
+            .token-controls {
+                justify-content: center;
+            }
+            
+            .board-legend {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="board-window-container">
+        <div class="board-window-header">
+            <h1>🎲 D&D Battle Board</h1>
+        </div>
+        
+        <div class="board-controls">
+            <div class="board-size-controls">
+                <label for="board-width">Width:</label>
+                <input type="number" id="board-width" value="20" min="5" max="50">
+                <label for="board-height">Height:</label>
+                <input type="number" id="board-height" value="15" min="5" max="50">
+                <button onclick="resizeBoard()">Resize Board</button>
+            </div>
+            
+            <div class="token-controls">
+                <select id="token-type">
+                    <option value="player">Player</option>
+                    <option value="npc">NPC</option>
+                    <option value="enemy">Enemy</option>
+                    <option value="monster">Monster</option>
+                    <option value="numbered">Numbered</option>
+                </select>
+                <select id="token-assignment">
+                    <option value="">Select Character...</option>
+                </select>
+                <input type="number" id="token-number" placeholder="Number" min="1" max="99" style="width: 80px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 6px; color: #fff; padding: 0.5rem;">
+                <button onclick="addToken()">Add Token</button>
+            </div>
+        </div>
+        
+        <div class="board-container">
+            <div class="board-grid" id="board-grid">
+                <!-- Board cells will be generated here -->
+            </div>
+        </div>
+        
+        <div class="board-legend">
+            <div class="legend-item">
+                <div class="legend-color player"></div>
+                <span>Players</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color npc"></div>
+                <span>NPCs</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color enemy"></div>
+                <span>Enemies</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color monster"></div>
+                <span>Monsters</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color numbered"></div>
+                <span>Numbered Tokens</span>
+            </div>
+        </div>
+        
+        <div class="board-actions">
+            <button onclick="clearBoard()">Clear Board</button>
+            <button onclick="saveBoard()">Save Board</button>
+            <button onclick="loadBoard()">Load Board</button>
+        </div>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        // Board state
+        let boardWidth = 20;
+        let boardHeight = 15;
+        let tokens = [];
+        let tokenCounter = 1;
+        
+        // Get current campaign ID
+        function getCurrentCampaignId() {
+            console.log('🔍 Attempting to get campaign ID...');
+            
+            // Try to get from URL parameters first
+            const urlParams = new URLSearchParams(window.location.search);
+            const campaignId = urlParams.get('campaignId');
+            if (campaignId) {
+                console.log('✅ Found campaign ID from URL:', campaignId);
+                return campaignId;
+            }
+            
+            // Try to get from localStorage
+            const storedCampaign = localStorage.getItem('activeCampaign');
+            if (storedCampaign) {
+                try {
+                    const campaign = JSON.parse(storedCampaign);
+                    console.log('✅ Found campaign ID from localStorage:', campaign.id);
+                    return campaign.id;
+                } catch (error) {
+                    console.error('❌ Error parsing stored campaign:', error);
+                }
+            }
+            
+            // Try to get from shared.js if available
+            if (typeof activeCampaign !== 'undefined' && activeCampaign) {
+                console.log('✅ Found campaign ID from shared.js:', activeCampaign.id);
+                return activeCampaign.id;
+            }
+            
+            // Try to get from window.parent if available (for pop-out windows)
+            try {
+                if (window.parent && window.parent !== window) {
+                    const parentCampaign = window.parent.activeCampaign;
+                    if (parentCampaign && parentCampaign.id) {
+                        console.log('✅ Found campaign ID from parent window:', parentCampaign.id);
+                        return parentCampaign.id;
+                    }
+                }
+            } catch (error) {
+                console.log('⚠️ Cannot access parent window (expected for pop-out)');
+            }
+            
+            // Try to get from any available campaign data
+            try {
+                const campaigns = JSON.parse(localStorage.getItem('campaigns') || '[]');
+                if (campaigns.length > 0) {
+                    const firstCampaign = campaigns[0];
+                    console.log('✅ Using first available campaign:', firstCampaign.id);
+                    return firstCampaign.id;
+                }
+            } catch (error) {
+                console.error('❌ Error parsing campaigns from localStorage:', error);
+            }
+            
+            console.log('❌ No campaign ID found');
+            return null;
+        }
+        
+        // Fetch character data for profile picture
+        async function fetchCharacterData(characterId) {
+            try {
+                const campaignId = getCurrentCampaignId();
+                if (!campaignId) return null;
+                
+                const response = await fetch(`/api/characters/${characterId}?campaignId=${campaignId}`);
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (error) {
+                console.error('❌ Error fetching character data:', error);
+            }
+            return null;
+        }
+        
+        // Update token display with image or initials
+        function updateTokenDisplay(tokenId, image, initials) {
+            const tokenElement = document.querySelector(`[data-token-id="${tokenId}"]`);
+            if (!tokenElement) return;
+            
+            if (image) {
+                tokenElement.innerHTML = `<img src="${image}" alt="Character" class="token-image">`;
+            } else if (initials) {
+                tokenElement.innerHTML = `<span class="token-initials">${initials}</span>`;
+            }
+        }
+        
+        // Initialize board
+        function initializeBoard() {
+            console.log('🎲 Initializing D&D Board...');
+            createBoard();
+            loadCharacters();
+        }
+        
+        // Create the board grid
+        function createBoard() {
+            const boardGrid = document.getElementById('board-grid');
+            boardGrid.innerHTML = '';
+            boardGrid.style.gridTemplateColumns = `repeat(${boardWidth}, 1fr)`;
+            boardGrid.style.gridTemplateRows = `repeat(${boardHeight}, 1fr)`;
+            
+            for (let y = 0; y < boardHeight; y++) {
+                for (let x = 0; x < boardWidth; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'board-cell';
+                    cell.dataset.x = x;
+                    cell.dataset.y = y;
+                    cell.addEventListener('click', () => handleCellClick(x, y));
+                    boardGrid.appendChild(cell);
+                }
+            }
+        }
+        
+        // Resize board
+        function resizeBoard() {
+            boardWidth = parseInt(document.getElementById('board-width').value);
+            boardHeight = parseInt(document.getElementById('board-height').value);
+            
+            // Clear existing tokens
+            tokens = [];
+            createBoard();
+            console.log(`📏 Board resized to ${boardWidth}x${boardHeight}`);
+        }
+        
+        // Handle cell click
+        function handleCellClick(x, y) {
+            const tokenType = document.getElementById('token-type').value;
+            const tokenAssignment = document.getElementById('token-assignment').value;
+            const tokenNumber = document.getElementById('token-number').value;
+            
+            if (tokenType === 'numbered' && !tokenNumber) {
+                alert('Please enter a number for numbered tokens');
+                return;
+            }
+            
+            // Remove existing token at this position
+            removeTokenAt(x, y);
+            
+            // Add new token
+            addTokenAt(x, y, tokenType, tokenAssignment, tokenNumber);
+        }
+        
+        // Add token at specific position
+        function addTokenAt(x, y, type, assignment, number) {
+            let tokenName = '';
+            let displayText = '';
+            let tokenImage = null;
+            let tokenInitials = '';
+            
+            if (assignment) {
+                // Parse assignment (char_123, npc_456, enemy_789)
+                const [assignmentType, assignmentId] = assignment.split('_');
+                tokenName = assignment;
+                
+                // Get display text from assignment
+                const assignmentSelect = document.getElementById('token-assignment');
+                const selectedOption = assignmentSelect.querySelector(`option[value="${assignment}"]`);
+                if (selectedOption) {
+                    const fullText = selectedOption.textContent;
+                    // Extract just the name (remove emoji and type)
+                    tokenName = fullText.replace(/^[^\s]+\s/, '').replace(/\s\([^)]+\)$/, '');
+                    
+                    if (assignmentType === 'char') {
+                        // For characters, try to get profile picture
+                        displayText = fullText.charAt(0); // Use the emoji as fallback
+                        // We'll fetch the character data to get the profile picture
+                        fetchCharacterData(assignmentId).then(characterData => {
+                            if (characterData && characterData.portraitUrl) {
+                                tokenImage = characterData.portraitUrl;
+                                updateTokenDisplay(token.id, tokenImage, null);
+                            }
+                        });
+                    } else {
+                        // For NPCs and enemies, use initials
+                        const words = tokenName.split(' ');
+                        if (words.length >= 2) {
+                            tokenInitials = (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+                        } else {
+                            tokenInitials = tokenName.substring(0, 2).toUpperCase();
+                        }
+                        displayText = tokenInitials;
+                    }
+                }
+            } else if (type === 'numbered' && number) {
+                tokenName = `#${number}`;
+                displayText = number.toString();
+            } else {
+                tokenName = `${type.charAt(0).toUpperCase() + type.slice(1)} ${tokenCounter}`;
+                displayText = type.charAt(0).toUpperCase();
+            }
+            
+            const token = {
+                id: Date.now() + Math.random(),
+                x: x,
+                y: y,
+                type: type,
+                assignment: assignment,
+                number: number || tokenCounter++,
+                name: tokenName,
+                displayText: displayText,
+                image: tokenImage,
+                initials: tokenInitials
+            };
+            
+            tokens.push(token);
+            renderToken(token);
+            console.log(`🎯 Added ${type} token "${tokenName}" at (${x}, ${y})`);
+        }
+        
+        // Add token button handler
+        function addToken() {
+            const x = Math.floor(Math.random() * boardWidth);
+            const y = Math.floor(Math.random() * boardHeight);
+            const tokenType = document.getElementById('token-type').value;
+            const tokenAssignment = document.getElementById('token-assignment').value;
+            const tokenNumber = document.getElementById('token-number').value;
+            
+            if (tokenType === 'numbered' && !tokenNumber) {
+                alert('Please enter a number for numbered tokens');
+                return;
+            }
+            
+            // Remove existing token at random position
+            removeTokenAt(x, y);
+            
+            // Add new token
+            addTokenAt(x, y, tokenType, tokenAssignment, tokenNumber);
+        }
+        
+        // Remove token at position
+        function removeTokenAt(x, y) {
+            const tokenIndex = tokens.findIndex(token => token.x === x && token.y === y);
+            if (tokenIndex !== -1) {
+                const token = tokens[tokenIndex];
+                const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                const existingToken = cell.querySelector('.token');
+                if (existingToken) {
+                    existingToken.remove();
+                }
+                tokens.splice(tokenIndex, 1);
+                cell.classList.remove('occupied');
+            }
+        }
+        
+        // Render token on board
+        function renderToken(token) {
+            const cell = document.querySelector(`[data-x="${token.x}"][data-y="${token.y}"]`);
+            if (!cell) return;
+            
+            // Remove existing token
+            const existingToken = cell.querySelector('.token');
+            if (existingToken) {
+                existingToken.remove();
+            }
+            
+            const tokenElement = document.createElement('div');
+            tokenElement.className = `token ${token.type}`;
+            tokenElement.dataset.tokenId = token.id;
+            
+            // Set token content based on type
+            if (token.image) {
+                tokenElement.innerHTML = `<img src="${token.image}" alt="${token.name}" class="token-image">`;
+            } else if (token.initials) {
+                tokenElement.innerHTML = `<span class="token-initials">${token.initials}</span>`;
+            } else {
+                tokenElement.textContent = token.displayText || (token.type === 'numbered' ? token.number : token.type.charAt(0).toUpperCase());
+            }
+            
+            // Add tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'token-info';
+            tooltip.textContent = token.name;
+            tokenElement.appendChild(tooltip);
+            
+            // Make token draggable
+            tokenElement.draggable = true;
+            tokenElement.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', token.id);
+            });
+            
+            cell.appendChild(tokenElement);
+            cell.classList.add('occupied');
+        }
+        
+        // Load characters, NPCs, and enemies for assignment
+        async function loadCharacters() {
+            try {
+                const assignmentSelect = document.getElementById('token-assignment');
+                assignmentSelect.innerHTML = '<option value="">Select Character...</option>';
+                
+                // Get current campaign ID
+                let campaignId = getCurrentCampaignId();
+                
+                // If no campaign ID found, try to load campaigns and use the first one
+                if (!campaignId) {
+                    console.log('⚠️ No active campaign found, attempting to load campaigns...');
+                    try {
+                        const campaignsResponse = await fetch('/api/campaigns');
+                        const campaigns = await campaignsResponse.json();
+                        if (campaigns.length > 0) {
+                            campaignId = campaigns[0].id;
+                            console.log('✅ Using first available campaign:', campaignId);
+                        } else {
+                            console.log('❌ No campaigns available');
+                            return;
+                        }
+                    } catch (error) {
+                        console.error('❌ Error loading campaigns:', error);
+                        return;
+                    }
+                }
+                
+                // Load characters
+                try {
+                    const charactersResponse = await fetch(`/api/characters?campaignId=${campaignId}`);
+                    const characters = await charactersResponse.json();
+                    
+                    characters.forEach(character => {
+                        const option = document.createElement('option');
+                        option.value = `char_${character.id}`;
+                        option.textContent = `👤 ${character.name} (Character)`;
+                        assignmentSelect.appendChild(option);
+                    });
+                    
+                    console.log(`📋 Loaded ${characters.length} characters`);
+                } catch (error) {
+                    console.error('❌ Error loading characters:', error);
+                }
+                
+                // Load NPCs
+                try {
+                    const npcsResponse = await fetch(`/api/npcs?campaignId=${campaignId}`);
+                    const npcs = await npcsResponse.json();
+                    
+                    npcs.forEach(npc => {
+                        const option = document.createElement('option');
+                        option.value = `npc_${npc.id}`;
+                        option.textContent = `🧙 ${npc.name} (NPC)`;
+                        assignmentSelect.appendChild(option);
+                    });
+                    
+                    console.log(`📋 Loaded ${npcs.length} NPCs`);
+                } catch (error) {
+                    console.error('❌ Error loading NPCs:', error);
+                }
+                
+                // Load enemies
+                try {
+                    const enemiesResponse = await fetch(`/api/enemies?campaignId=${campaignId}`);
+                    const enemies = await enemiesResponse.json();
+                    
+                    enemies.forEach(enemy => {
+                        const option = document.createElement('option');
+                        option.value = `enemy_${enemy.id}`;
+                        option.textContent = `⚔️ ${enemy.name} (Enemy)`;
+                        assignmentSelect.appendChild(option);
+                    });
+                    
+                    console.log(`📋 Loaded ${enemies.length} enemies`);
+                } catch (error) {
+                    console.error('❌ Error loading enemies:', error);
+                }
+                
+                console.log('✅ All character data loaded for token assignment');
+            } catch (error) {
+                console.error('❌ Error loading character data:', error);
+            }
+        }
+        
+        // Clear board
+        function clearBoard() {
+            if (confirm('Are you sure you want to clear all tokens from the board?')) {
+                tokens = [];
+                document.querySelectorAll('.token').forEach(token => token.remove());
+                document.querySelectorAll('.board-cell').forEach(cell => {
+                    cell.classList.remove('occupied');
+                });
+                console.log('🧹 Board cleared');
+            }
+        }
+        
+        // Save board
+        function saveBoard() {
+            const boardData = {
+                width: boardWidth,
+                height: boardHeight,
+                tokens: tokens,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('dnd-board-data', JSON.stringify(boardData));
+            console.log('💾 Board saved to localStorage');
+            alert('Board saved successfully!');
+        }
+        
+        // Load board
+        function loadBoard() {
+            const savedData = localStorage.getItem('dnd-board-data');
+            if (savedData) {
+                const boardData = JSON.parse(savedData);
+                boardWidth = boardData.width;
+                boardHeight = boardData.height;
+                tokens = boardData.tokens || [];
+                
+                document.getElementById('board-width').value = boardWidth;
+                document.getElementById('board-height').value = boardHeight;
+                
+                createBoard();
+                tokens.forEach(token => renderToken(token));
+                
+                console.log('📂 Board loaded from localStorage');
+                alert('Board loaded successfully!');
+            } else {
+                alert('No saved board found');
+            }
+        }
+        
+        // Handle drag and drop
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const tokenId = e.dataTransfer.getData('text/plain');
+            const targetCell = e.target.closest('.board-cell');
+            
+            if (targetCell && tokenId) {
+                const x = parseInt(targetCell.dataset.x);
+                const y = parseInt(targetCell.dataset.y);
+                
+                // Find and update token position
+                const token = tokens.find(t => t.id == tokenId);
+                if (token) {
+                    // Remove from old position
+                    removeTokenAt(token.x, token.y);
+                    
+                    // Add to new position
+                    token.x = x;
+                    token.y = y;
+                    tokens.push(token);
+                    renderToken(token);
+                    
+                    console.log(`🎯 Moved token to (${x}, ${y})`);
+                }
+            }
+        });
+        
+        // Initialize board when page loads
+        document.addEventListener('DOMContentLoaded', initializeBoard);
+    </script>
+</body>
+</html>
